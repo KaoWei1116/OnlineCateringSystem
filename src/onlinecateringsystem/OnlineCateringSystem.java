@@ -63,6 +63,20 @@ public class OnlineCateringSystem {
                 case 3:
                     System.exit(0);
                 case 4:
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|       Reset Password Page         |");
+                    System.out.println("=====================================");
+                    Register[] registerArrResetPassword = new Register[20];
+                    registerUI.resetPassword(registerArrResetPassword);
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|            Login Page             |");
+                    System.out.println("=====================================");
+                    usernameInputCheck = login.loginPage();
+                    if(usernameInputCheck ==  "exit") {
+                       usernameInputCheck = startingInterfaceMenu();
+                   }
                     break;
                 default:
                     System.out.println("Please insert an integer between 1 to 4. Thank you.");
@@ -103,6 +117,13 @@ public class OnlineCateringSystem {
             choice = scanner.nextInt();
             switch (choice) {
                 case 1:
+                    viewUserProfile.viewUserProfile(finalUsername);
+                    System.out.println("\nPress enter something to return to option menu...");
+                    word = scanner.next();
+                    if(!word.isEmpty()) 
+                    {
+                        customerMenu();
+                    }
                     break;
                 case 2:
                     break;
