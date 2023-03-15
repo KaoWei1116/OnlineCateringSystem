@@ -1,2 +1,18 @@
-ITM0001|Apple Pie|Dessert|A delicious fruit pie with apple as the filling ingredient.|8.00|
-ITM0002|Strawberry Shortcake|Dessert|A tender vanilla cake filled with layers of whipped cream frosting and juicy strawberries. The classic flavors of strawberry shorcake in a layer cake.|15.00|
+ITM0001|Apple Pie|Dessert|A delicious fruit pie with apple as the filling ingredient.|10.00|
+ITM0002|Strawberry Shortcake|Dessert|A tender vanilla cake filled with layers of whipped cream frosting and juicy strawberries. The classic flavors of strawberry shortcake in a layer cake.|15.00|
+ITM0003|Brownies|Dessert|The Classic Tray bake. Made with smooth dark chocolate giving this brownie a rich, gooey texture. Everyone will love this brownie!|15.00|
+ITM0004|Macaron|Dessert|A French pastry composed of two shells and a filling in the middle. The shells are made with almond flour, egg white and sugar. The filling is either a buttercream or a ganache.|5.00|
+ITM0005|Macaroon|Dessert|A cookie made with almond paste|8.00|
+ITM0006|Vanilla Cream Puff|Dessert|A sweet pastry made with a choux pastry dough that is baked to form small dome shaped puffs.|6.00|
+ITM0007|Tacos|Appetizer|A Mexican food that consists of a folded and usually fried piece of thin bread (called a tortilla) that is filled with meat, cheese, lettuce, etc.|6.00|
+ITM0008|Club Sandwich|Main Dish|The most iconic sandwiches on any menu! Layers of ham, bacon and turkey with juicy tomatoes, crisp lettuce and cheddar cheese create the perfect bite!|8.00|
+ITM0009|Yangzhou Fried Rice|Main Dish|A popular Chinese-style wok fried rice dish which contain shrimp, scallop, carrots, eggs and peas.|12.00|
+ITM0010|Fried Chicken|Main Dish|Chicken pieces that have been coated with seasoned flour or batter and pan-fried, deep fried, pressure fried, or air fried.|10.00|
+ITM0011|Fried Noodles|Main Dish|Noodles served with shrimp, bok choy and squid.|12.00|
+ITM0012|Lamb Chop|Main Dish|Cuts of lamb grilled with honey until medium rare.|18.00|
+ITM0013|Steak|Main Dish|Thick cut of beef grilled until medium rare.|19.00|
+ITM0014|Aglio Olio|Main Dish|A traditional Italian pasta dish from served with thinly sliced garlic, olive oil, parsley and chilli flakes.|15.00|
+ITM0015|Cocktail Sausages|Appetizer|Small sausages cooked in a sweet and sticky combination of sesame oil, honey and soy sauce.|8.00|
+ITM0016|French Fries|Appetizer|Deep-fried potatoes that have been cut into slices and strips.|6.00|
+ITM0017|Shrimp Scampi|Appetizer|Jumbo shrimp sauted in white wine, butter and garlic.|11.00|
+ITM0018|Steamed Prawns with Shaoxing Wine|Appetizer|Fresh prawn steamed with shaoxing wine.|12.00|
