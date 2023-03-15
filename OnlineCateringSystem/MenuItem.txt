@@ -1,0 +1,2 @@
+ITM0001|Apple Pie|Dessert|A delicious fruit pie with apple as the filling ingredient.|8.00|
+ITM0002|Strawberry Shortcake|Dessert|A tender vanilla cake filled with layers of whipped cream frosting and juicy strawberries. The classic flavors of strawberry shorcake in a layer cake.|15.00|
