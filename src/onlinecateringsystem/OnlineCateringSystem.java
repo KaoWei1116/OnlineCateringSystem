@@ -45,6 +45,13 @@ public class OnlineCateringSystem {
                     login.loginPage();
                     break;
                 case 2:
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|           Register Page           |");
+                    System.out.println("=====================================");
+                    Register[] registerArr = new Register[20];
+                    registerUI.registerModule(registerArr);
+                    System.out.print("\n");
                     break;
                 case 3:
                     System.exit(0);
@@ -55,6 +62,7 @@ public class OnlineCateringSystem {
                     break;
             }
         } while (choice < 1 || choice > 4);
+        
     }
 
     public static void main(String[] args) throws IOException, FileNotFoundException, InterruptedException {
