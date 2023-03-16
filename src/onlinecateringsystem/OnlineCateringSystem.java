@@ -126,6 +126,9 @@ public class OnlineCateringSystem {
                     }
                     break;
                 case 2:
+                    Ordering ordering = new Ordering();
+                    ordering.readMenuItem();
+                    ordering.printMenu();
                     break;
                 case 3:
                     finalUsername = startingInterfaceMenu();
