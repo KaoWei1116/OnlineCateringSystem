@@ -7,6 +7,9 @@ import java.util.Scanner;
 /**
  *
  * @author Chong Kao Wei
+ * @author Heng Tze Hao
+ * @author Mok Chun Kit Calvin
+ * @author Ooi Chin Hui
  */
 public class OnlineCateringSystem {
 
@@ -15,6 +18,7 @@ public class OnlineCateringSystem {
 
     private static String startingInterfaceMenu() throws IOException, FileNotFoundException, InterruptedException {
         String usernameInputCheck = "exit";
+        String registerStatusCheck = "fail";
         int choice = 0;
         Login login = new Login();
         do {
@@ -39,7 +43,7 @@ public class OnlineCateringSystem {
                     System.out.println("|            Login Page             |");
                     System.out.println("=====================================");
                     usernameInputCheck = login.loginPage();
-                    if (usernameInputCheck == "exit") {
+                    if (usernameInputCheck.compareTo("exit") == 0) {
                         usernameInputCheck = startingInterfaceMenu();
                     }
                     break;
@@ -49,16 +53,22 @@ public class OnlineCateringSystem {
                     System.out.println("|           Register Page           |");
                     System.out.println("=====================================");
                     Register[] registerArr = new Register[20];
-                    registerUI.registerModule(registerArr);
-                    System.out.print("\n");
-                    System.out.println("=====================================");
-                    System.out.println("|            Login Page             |");
-                    System.out.println("=====================================");
-                    usernameInputCheck = login.loginPage();
-                    if (usernameInputCheck == "exit") {
-                        usernameInputCheck = startingInterfaceMenu();
+                    registerStatusCheck = registerUI.registerModule(registerArr);
+                    if (registerStatusCheck.compareTo("fail") == 0) {
+                        registerStatusCheck = startingInterfaceMenu();
                     }
-
+                    else
+                    {
+                        System.out.print("\n");
+                        System.out.println("=====================================");
+                        System.out.println("|            Login Page             |");
+                        System.out.println("=====================================");
+                        usernameInputCheck = login.loginPage();
+                        if (usernameInputCheck.compareTo("exit") == 0) {
+                            usernameInputCheck = startingInterfaceMenu();
+                        }
+                        
+                    }
                     break;
                 case 3:
                     System.exit(0);
@@ -74,7 +84,7 @@ public class OnlineCateringSystem {
                     System.out.println("|            Login Page             |");
                     System.out.println("=====================================");
                     usernameInputCheck = login.loginPage();
-                    if(usernameInputCheck ==  "exit") {
+                     if (usernameInputCheck.compareTo("exit") == 0) {
                        usernameInputCheck = startingInterfaceMenu();
                    }
                     break;
