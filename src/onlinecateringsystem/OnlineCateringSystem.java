@@ -7,9 +7,6 @@ import java.util.Scanner;
 /**
  *
  * @author Chong Kao Wei
- * @author Heng Tze Hao
- * @author Mok Chun Kit Calvin
- * @author Ooi Chin Hui
  */
 public class OnlineCateringSystem {
 
@@ -18,7 +15,6 @@ public class OnlineCateringSystem {
 
     private static String startingInterfaceMenu() throws IOException, FileNotFoundException, InterruptedException {
         String usernameInputCheck = "exit";
-        String registerStatusCheck = "fail";
         int choice = 0;
         Login login = new Login();
         do {
@@ -43,7 +39,7 @@ public class OnlineCateringSystem {
                     System.out.println("|            Login Page             |");
                     System.out.println("=====================================");
                     usernameInputCheck = login.loginPage();
-                    if (usernameInputCheck.compareTo("exit") == 0) {
+                    if (usernameInputCheck == "exit") {
                         usernameInputCheck = startingInterfaceMenu();
                     }
                     break;
@@ -53,22 +49,16 @@ public class OnlineCateringSystem {
                     System.out.println("|           Register Page           |");
                     System.out.println("=====================================");
                     Register[] registerArr = new Register[20];
-                    registerStatusCheck = registerUI.registerModule(registerArr);
-                    if (registerStatusCheck.compareTo("fail") == 0) {
-                        registerStatusCheck = startingInterfaceMenu();
+                    registerUI.registerModule(registerArr);
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|            Login Page             |");
+                    System.out.println("=====================================");
+                    usernameInputCheck = login.loginPage();
+                    if (usernameInputCheck == "exit") {
+                        usernameInputCheck = startingInterfaceMenu();
                     }
-                    else
-                    {
-                        System.out.print("\n");
-                        System.out.println("=====================================");
-                        System.out.println("|            Login Page             |");
-                        System.out.println("=====================================");
-                        usernameInputCheck = login.loginPage();
-                        if (usernameInputCheck.compareTo("exit") == 0) {
-                            usernameInputCheck = startingInterfaceMenu();
-                        }
-                        
-                    }
+
                     break;
                 case 3:
                     System.exit(0);
@@ -78,15 +68,7 @@ public class OnlineCateringSystem {
                     System.out.println("|       Reset Password Page         |");
                     System.out.println("=====================================");
                     Register[] registerArrResetPassword = new Register[20];
-                    registerUI.resetPassword(registerArrResetPassword);
-                    System.out.print("\n");
-                    System.out.println("=====================================");
-                    System.out.println("|            Login Page             |");
-                    System.out.println("=====================================");
-                    usernameInputCheck = login.loginPage();
-                     if (usernameInputCheck.compareTo("exit") == 0) {
-                       usernameInputCheck = startingInterfaceMenu();
-                   }
+                    registerUI.forgetPassword(registerArrResetPassword);
                     break;
                 default:
                     System.out.println("Please insert an integer between 1 to 4. Thank you.");
@@ -136,9 +118,6 @@ public class OnlineCateringSystem {
                     }
                     break;
                 case 2:
-                    Ordering ordering = new Ordering();
-                    ordering.readMenuItem();
-                    ordering.printMenu();
                     break;
                 case 3:
                     finalUsername = startingInterfaceMenu();
