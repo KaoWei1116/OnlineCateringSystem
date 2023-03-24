@@ -116,6 +116,7 @@ public class AdminOperation {
 
             System.out.println("Password must have at least one numerical character, one lowercase character and one uppercase character.");
             System.out.println("Password must also have at least one special symbol such as @,#,$,%,!,*,& and password length should be between 8 and 16.");
+            System.out.println("\n\nEnter password >");
             String password = scan.next();
 
             int upperCase = 0;
@@ -146,7 +147,7 @@ public class AdminOperation {
 
         //input for staff name
         System.out.println("\n\nEnter Staff Name >");
-        String name = scan.next();
+        String name = getUserInputStaffInformation();
         newStaff.setStaffName(name);
 
         //input and validation for staff gender
@@ -252,9 +253,16 @@ public class AdminOperation {
         }
     }
     
-    public static void main(String args[]){
-        AdminOperation adminOperat = new AdminOperation();
-        adminOperat.addStaff();
-       // adminOperat.createStaffFile();
+    private static String getUserInputStaffInformation() {
+        String outputString;
+        Scanner user = new Scanner(System.in);
+        outputString = user.nextLine();
+        return outputString;
     }
+    
+//    public static void main(String args[]){
+//        AdminOperation adminOperat = new AdminOperation();
+//        adminOperat.addStaff();
+//       // adminOperat.createStaffFile();
+//    }
 }

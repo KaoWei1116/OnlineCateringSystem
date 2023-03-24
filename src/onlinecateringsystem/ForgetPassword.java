@@ -8,13 +8,13 @@ package onlinecateringsystem;
 import entity.Email;
 import java.util.Properties;
 import java.util.Random;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+//import javax.mail.Authenticator;
+//import javax.mail.Message;
+//import javax.mail.PasswordAuthentication;
+//import javax.mail.Session;
+//import javax.mail.Transport;
+//import javax.mail.internet.InternetAddress;
+//import javax.mail.internet.MimeMessage;
 
 /**
  *
@@ -45,21 +45,21 @@ public class ForgetPassword {
             pr.put("mail.smtp.socketFactory.port", "587");
             pr.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             
-             Session session = Session.getInstance(pr, new Authenticator(){
-                 @Override
-                 protected PasswordAuthentication getPasswordAuthentication(){
-                     return new PasswordAuthentication(fromEmail,password);
-                 }
-             });
-             
-             Message mess = new MimeMessage(session);
-             
-             mess.setFrom(new InternetAddress(fromEmail));
-             mess.setRecipient(Message.RecipientType.TO,new InternetAddress(toEmail));
-             mess.setSubject("User Email Vertification");
-             mess.setText("Registered successfully.Please verify your account using this code : " + email.getCode());
-             
-             Transport.send(mess);
+//             Session session = Session.getInstance(pr, new Authenticator(){
+//                 @Override
+//                 protected PasswordAuthentication getPasswordAuthentication(){
+//                     return new PasswordAuthentication(fromEmail,password);
+//                 }
+//             });
+//             
+//             Message mess = new MimeMessage(session);
+//             
+//             mess.setFrom(new InternetAddress(fromEmail));
+//             mess.setRecipient(Message.RecipientType.TO,new InternetAddress(toEmail));
+//             mess.setSubject("User Email Vertification");
+//             mess.setText("Registered successfully.Please verify your account using this code : " + email.getCode());
+//             
+//             Transport.send(mess);
              
              test=true;
         }
