@@ -2,6 +2,7 @@ package onlinecateringsystem;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Scanner;
 
 /**
@@ -15,6 +16,7 @@ public class OnlineCateringSystem {
 
     private static String startingInterfaceMenu() throws IOException, FileNotFoundException, InterruptedException {
         String usernameInputCheck = "exit";
+        String registerStatusCheck = "fail";
         int choice = 0;
         Login login = new Login();
         do {
@@ -49,7 +51,10 @@ public class OnlineCateringSystem {
                     System.out.println("|           Register Page           |");
                     System.out.println("=====================================");
                     Register[] registerArr = new Register[20];
-                    registerUI.registerModule(registerArr);
+                    registerStatusCheck = registerUI.registerModule(registerArr);
+                    if (registerStatusCheck.compareTo("fail") == 0) {
+                        registerStatusCheck = startingInterfaceMenu();
+                    }
                     System.out.print("\n");
                     System.out.println("=====================================");
                     System.out.println("|            Login Page             |");
@@ -80,12 +85,32 @@ public class OnlineCateringSystem {
         return usernameInputCheck;
     }
 
-    public static void main(String[] args) throws IOException, FileNotFoundException, InterruptedException {
+    public static void main(String[] args) throws IOException, FileNotFoundException, InterruptedException, ParseException {
         finalUsername = startingInterfaceMenu();
         while (finalUsername.equals("12312313") == false) {
-            if (finalUsername.equals("1") == false || finalUsername.equals("exit") == false) {
-                customerMenu();
+            //admin account
+            if (finalUsername.equals("1") == true && finalUsername.equals("exit") == false)
+            {
+                adminMenu();
+                
+            }   
+            else
+            {
+                //if first character is S then staff account
+                if(finalUsername.charAt(0) == 'S' && finalUsername.equals("exit") == false)
+                {
+                    staffMenu();
+                    
+                }
+                //otherwise customer account
+                else
+                {
+                    customerMenu();
+                    
+                }
             }
+
+            
         }
     }
 
@@ -118,6 +143,9 @@ public class OnlineCateringSystem {
                     }
                     break;
                 case 2:
+                    Ordering ordering = new Ordering();
+                    ordering.readMenuItem();
+                    ordering.printMenu();
                     break;
                 case 3:
                     finalUsername = startingInterfaceMenu();
@@ -128,5 +156,73 @@ public class OnlineCateringSystem {
 
             }
         } while (choice < 1 || choice > 3);
+    }
+    
+    private static void adminMenu() throws IOException, FileNotFoundException, InterruptedException {
+        int choice = 0;
+        System.out.printf("\n");
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        System.out.println("++   Welcome back admin             +");
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        do {
+            System.out.print("\n");
+            System.out.println("Admin Menu :");
+            System.out.println("=====================================");
+            System.out.println("|   1. Create Staff Account         |");
+            System.out.println("|   2. Logout                       |");
+            System.out.println("=====================================");
+            System.out.print("\n");
+            System.out.print("Enter an number : ");
+            choice = scanner.nextInt();
+            switch(choice){
+               case 1:
+                    AdminOperation adminOperat = new AdminOperation();
+                    adminOperat.addStaff();
+                    break;
+                case 2:
+                    finalUsername = startingInterfaceMenu();
+                    break;
+                default:
+                    System.out.println("Please insert an integer between 1 to 2. Thank you.");
+                    break; 
+            }
+                
+        } while (choice <1 || choice > 2);
+    }
+    
+    private static void staffMenu() throws IOException, ParseException, FileNotFoundException, InterruptedException {
+        int choice = 0;
+        System.out.printf("\n");
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        System.out.println("++   Welcome back " + finalUsername);
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        do {
+            System.out.print("\n");
+            System.out.println("Staff Menu :");
+            System.out.println("=====================================");
+            System.out.println("|   1. Add Inventory                |");
+            System.out.println("|   2. Logout                       |");            
+            System.out.println("=====================================");
+            System.out.print("\n");
+            System.out.print("Enter an number : ");
+            choice = scanner.nextInt();
+            switch(choice){
+               case 1:
+                     System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|        Add Inventory Page         |");
+                    System.out.println("=====================================");
+                    Inventory[] inventoryArr = new Inventory[20];
+                    InventoryUI.inventoryModule(inventoryArr);
+                    break;
+                case 2:
+                    finalUsername = startingInterfaceMenu();
+                    break;
+                default:
+                    System.out.println("Please insert an integer between 1 to 2. Thank you.");
+                    break; 
+            }
+           
+        } while (choice <1 || choice > 2);
     }
 }
