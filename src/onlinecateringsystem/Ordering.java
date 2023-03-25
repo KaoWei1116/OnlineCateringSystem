@@ -25,6 +25,24 @@ public class Ordering {
 
     private Scanner fileScanner;
 
+    public void sortMenuItemAscending() {
+        menuItemList.sortLinkedListAscending();
+    }
+
+    public void sortMenuItemDescending() {
+        menuItemList.sortLinkedListDescending();
+    }
+
+    public LinkedList<MenuItem> filterByCategory(String filterSetting) {
+        LinkedList<MenuItem> menuItemList = new LinkedList<MenuItem>();
+        for (int i = 1; i < this.menuItemList.getNumberOfEntries() + 1; i++) {
+            if (this.menuItemList.getEntry(i).getCategory().equals(filterSetting)) {
+                menuItemList.add(this.menuItemList.getEntry(i));
+            }
+        }
+        return menuItemList;
+    }
+
     public int readMenuItem() {
         try {                 //open file
             fileScanner = new Scanner(new File("MenuItem.txt"));
@@ -50,13 +68,11 @@ public class Ordering {
 
     public void printMenu() {
         //Display menu
-        System.out.println("==============");
-        System.out.println("|| Menu     ||");
-        System.out.println("==============");
-
+        System.out.println("============================================================");
+        System.out.println("||                          Menu                          ||");
+        System.out.println("============================================================");
         for (int i = 1; i < menuItemList.getNumberOfEntries() + 1; i++) {
-            System.out.printf("%2d %20s %10s RM%2.2f \n", i, menuItemList.getEntry(i).getItemName(), menuItemList.getEntry(i).getCategory(), menuItemList.getEntry(i).getPrice());
-
+            System.out.printf("%2d    %20s       %10s         RM%2.2f \n", i, menuItemList.getEntry(i).getItemName(), menuItemList.getEntry(i).getCategory(), menuItemList.getEntry(i).getPrice());
         }
     }
 

@@ -74,16 +74,16 @@ public class OnlineCateringSystem {
                     System.out.println("|            Login Page             |");
                     System.out.println("=====================================");
                     usernameInputCheck = login.loginPage();
-                    if(usernameInputCheck ==  "exit") {
-                       usernameInputCheck = startingInterfaceMenu();
-                   }
+                    if (usernameInputCheck == "exit") {
+                        usernameInputCheck = startingInterfaceMenu();
+                    }
                     break;
                 default:
                     System.out.println("Please insert an integer between 1 to 4. Thank you.");
                     break;
             }
         } while (choice < 1 || choice > 4);
-        
+
         //return username
         return usernameInputCheck;
     }
@@ -120,8 +120,7 @@ public class OnlineCateringSystem {
                     viewUserProfile.viewUserProfile(finalUsername);
                     System.out.println("\nPress enter something to return to option menu...");
                     word = scanner.next();
-                    if(!word.isEmpty()) 
-                    {
+                    if (!word.isEmpty()) {
                         customerMenu();
                     }
                     break;
