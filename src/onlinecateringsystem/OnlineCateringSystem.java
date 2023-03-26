@@ -2,12 +2,14 @@ package onlinecateringsystem;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Scanner;
 
 /**
  *
  * @author Chong Kao Wei
+ * @author Heng Tze Hao
+ * @author Mok Chun Kit Calvin
+ * @author Ooi Chin Hui
  */
 public class OnlineCateringSystem {
 
@@ -41,7 +43,7 @@ public class OnlineCateringSystem {
                     System.out.println("|            Login Page             |");
                     System.out.println("=====================================");
                     usernameInputCheck = login.loginPage();
-                    if (usernameInputCheck == "exit") {
+                    if (usernameInputCheck.compareTo("exit") == 0) {
                         usernameInputCheck = startingInterfaceMenu();
                     }
                     break;
@@ -54,16 +56,17 @@ public class OnlineCateringSystem {
                     registerStatusCheck = registerUI.registerModule(registerArr);
                     if (registerStatusCheck.compareTo("fail") == 0) {
                         registerStatusCheck = startingInterfaceMenu();
-                    }
-                    System.out.print("\n");
-                    System.out.println("=====================================");
-                    System.out.println("|            Login Page             |");
-                    System.out.println("=====================================");
-                    usernameInputCheck = login.loginPage();
-                    if (usernameInputCheck == "exit") {
-                        usernameInputCheck = startingInterfaceMenu();
-                    }
+                    } else {
+                        System.out.print("\n");
+                        System.out.println("=====================================");
+                        System.out.println("|            Login Page             |");
+                        System.out.println("=====================================");
+                        usernameInputCheck = login.loginPage();
+                        if (usernameInputCheck.compareTo("exit") == 0) {
+                            usernameInputCheck = startingInterfaceMenu();
+                        }
 
+                    }
                     break;
                 case 3:
                     System.exit(0);
@@ -73,50 +76,44 @@ public class OnlineCateringSystem {
                     System.out.println("|       Reset Password Page         |");
                     System.out.println("=====================================");
                     Register[] registerArrResetPassword = new Register[20];
-                    registerUI.forgetPassword(registerArrResetPassword);
+                    registerUI.resetPassword(registerArrResetPassword);
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|            Login Page             |");
+                    System.out.println("=====================================");
+                    usernameInputCheck = login.loginPage();
+                    if (usernameInputCheck.compareTo("exit") == 0) {
+                        usernameInputCheck = startingInterfaceMenu();
+                    }
                     break;
                 default:
                     System.out.println("Please insert an integer between 1 to 4. Thank you.");
                     break;
             }
         } while (choice < 1 || choice > 4);
-        
+
         //return username
         return usernameInputCheck;
     }
 
-    public static void main(String[] args) throws IOException, FileNotFoundException, InterruptedException, ParseException {
+    public static void main(String[] args) throws IOException, FileNotFoundException, InterruptedException {
         finalUsername = startingInterfaceMenu();
         while (finalUsername.equals("12312313") == false) {
-            //admin account
-            if (finalUsername.equals("1") == true && finalUsername.equals("exit") == false)
-            {
-                adminMenu();
-                
-            }   
-            else
-            {
-                //if first character is S then staff account
-                if(finalUsername.charAt(0) == 'S' && finalUsername.equals("exit") == false)
-                {
-                    staffMenu();
-                    
-                }
-                //otherwise customer account
-                else
-                {
-                    customerMenu();
-                    
-                }
+            if (finalUsername.equals("1") == false || finalUsername.equals("exit") == false) {
+                customerMenu();
             }
-
-            
         }
     }
 
     private static void customerMenu() throws IOException, FileNotFoundException, InterruptedException {
+        Ordering ordering = new Ordering();
+        ordering.readMenuItem();
+        ordering.createOrderFile();
+        ordering.readOrderFromFile();
+
         int choice = 0;
         String word = "";
+        char startOrder;
         System.out.printf("\n");
         System.out.println("+++++++++++++++++++++++++++++++++++++");
         System.out.println("++   Welcome back " + finalUsername);
@@ -137,15 +134,17 @@ public class OnlineCateringSystem {
                     viewUserProfile.viewUserProfile(finalUsername);
                     System.out.println("\nPress enter something to return to option menu...");
                     word = scanner.next();
-                    if(!word.isEmpty()) 
-                    {
+                    if (!word.isEmpty()) {
                         customerMenu();
                     }
                     break;
                 case 2:
-                    Ordering ordering = new Ordering();
-                    ordering.readMenuItem();
                     ordering.printMenu();
+                    System.out.println("\nDo you want to make order? (Y-yes)");
+                    startOrder = scanner.next().charAt(0);
+                    if (startOrder == 'Y' || startOrder == 'y') {
+                        ordering.makeOrder();
+                    }
                     break;
                 case 3:
                     finalUsername = startingInterfaceMenu();
@@ -156,73 +155,5 @@ public class OnlineCateringSystem {
 
             }
         } while (choice < 1 || choice > 3);
-    }
-    
-    private static void adminMenu() throws IOException, FileNotFoundException, InterruptedException {
-        int choice = 0;
-        System.out.printf("\n");
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
-        System.out.println("++   Welcome back admin             +");
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
-        do {
-            System.out.print("\n");
-            System.out.println("Admin Menu :");
-            System.out.println("=====================================");
-            System.out.println("|   1. Create Staff Account         |");
-            System.out.println("|   2. Logout                       |");
-            System.out.println("=====================================");
-            System.out.print("\n");
-            System.out.print("Enter an number : ");
-            choice = scanner.nextInt();
-            switch(choice){
-               case 1:
-                    AdminOperation adminOperat = new AdminOperation();
-                    adminOperat.addStaff();
-                    break;
-                case 2:
-                    finalUsername = startingInterfaceMenu();
-                    break;
-                default:
-                    System.out.println("Please insert an integer between 1 to 2. Thank you.");
-                    break; 
-            }
-                
-        } while (choice <1 || choice > 2);
-    }
-    
-    private static void staffMenu() throws IOException, ParseException, FileNotFoundException, InterruptedException {
-        int choice = 0;
-        System.out.printf("\n");
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
-        System.out.println("++   Welcome back " + finalUsername);
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
-        do {
-            System.out.print("\n");
-            System.out.println("Staff Menu :");
-            System.out.println("=====================================");
-            System.out.println("|   1. Add Inventory                |");
-            System.out.println("|   2. Logout                       |");            
-            System.out.println("=====================================");
-            System.out.print("\n");
-            System.out.print("Enter an number : ");
-            choice = scanner.nextInt();
-            switch(choice){
-               case 1:
-                     System.out.print("\n");
-                    System.out.println("=====================================");
-                    System.out.println("|        Add Inventory Page         |");
-                    System.out.println("=====================================");
-                    Inventory[] inventoryArr = new Inventory[20];
-                    InventoryUI.inventoryModule(inventoryArr);
-                    break;
-                case 2:
-                    finalUsername = startingInterfaceMenu();
-                    break;
-                default:
-                    System.out.println("Please insert an integer between 1 to 2. Thank you.");
-                    break; 
-            }
-           
-        } while (choice <1 || choice > 2);
     }
 }

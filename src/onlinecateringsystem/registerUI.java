@@ -1,24 +1,17 @@
 package onlinecateringsystem;
 
-import entity.Email;
+
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.Properties;
-import java.util.Random;
-//import javax.mail.Authenticator;
-//import javax.mail.Session;
-//import javax.mail.*;
-//import javax.mail.internet.InternetAddress;
-//import javax.mail.internet.MimeMessage;
 
 /**
  *
  * @author Mok Chun Kit Calvin
  */
+
 public class registerUI {
-
-    public static String registerModule(Register[] registerArr) throws IOException {
-
+    public static String registerModule(Register[] registerArr) throws IOException{
+        
         Scanner scannerRegister = new Scanner(System.in);
         String userNameInput;
         String userPhoneNumberInput;
@@ -27,21 +20,20 @@ public class registerUI {
         String usernameInput;
         String passwordInput;
         int numRecordRegister;
-        char confirmRegister = 'y';
+        char confirmRegister = 'y'; 
         String registerStatus = "fail";
         Register register = new Register();
-
+           
         numRecordRegister = register.readRegisterFile(registerArr);
 
            do
            {
                 System.out.printf("\n"); 
                 System.out.printf("%-61s", "Enter name (EX: Tan Wei Sheng) : ");
-                userNameInput = getUserInputRegister();
+                userNameInput = scannerRegister.nextLine();
                 
                 if(Register.isValidateName(userNameInput) == true){
                     System.out.println(userNameInput + " is not a valid name.");  
-                    System.out.println("The name should not contain digits.");
                     System.out.println("Please enter again.");
                     
                 }
@@ -119,7 +111,7 @@ public class registerUI {
                 
                 if(Register.isValidateUsername(usernameInput) == true && Register.checkRegisterUsername(usernameInput, registerArr, numRecordRegister) == true) {
                     System.out.println(usernameInput + " is not a valid username.");
-                    System.out.println("The username length must between 6 and 14 which only contain the alphabet and digit(optional).");
+                    System.out.println("The username length must between 6 and 14 with only contain alphabet and digit(optional).");
                     System.out.println("This username is already taken");
                     System.out.println("Please enter again.");
                     
@@ -174,8 +166,7 @@ public class registerUI {
            if(Character.toUpperCase(confirmRegister) == 'Y'){
                 register.appendRegisterFile(userNameInput, userPhoneNumberInput, userICNoInput, userEmailAddressInput, usernameInput, passwordInput);
                 registerStatus = "success";
-                System.out.println("Register successfully.");
-                System.out.println("You are redirect to the login page.");
+                System.out.println("You are redirect to login page.");
                 System.out.println("You now can login with your username and password.");
                 
            }else {
@@ -195,67 +186,7 @@ public class registerUI {
         return outputString;
     }
 
-    public static void forgetPassword(Register[] registerArr) throws IOException {
-        Scanner scannerRegister = new Scanner(System.in);
-        String userEmailAddressInput;
-        String newUserPasswordInput;
-        int numRecordsTextFile;
-        Register register = new Register();
-
-        numRecordsTextFile = register.readRegisterFile(registerArr);
-
-        ForgetPassword forgetProcess = new ForgetPassword();
-
-        do {
-            System.out.printf("\n");
-            System.out.printf("%-61s", "Enter email address (EX: 2004jingsheng@gmail.com) : ");
-            userEmailAddressInput = scannerRegister.nextLine();
-
-            if (Register.checkRegisterEmailAddress(userEmailAddressInput, registerArr, numRecordsTextFile) == false) {
-                System.out.println("This email address is not found in the text file.");
-                System.out.println("Please enter again.");
-            } //if the email address is found in the text file
-            else {
-
-                Email email = new Email(registerArr[numRecordsTextFile-1].getName(), userEmailAddressInput, forgetProcess.getRandom());
-
-                boolean verifyEmail = forgetProcess.sendEmail(email);
-
-                if (verifyEmail) {
-                    System.out.printf("\n");
-                    System.out.println("New password must have at least one numerical character, one lowercase character and one uppercase character.");
-                    System.out.println("New password must also have at least one special symbol such as @,#,$,%,!,*,& and password length should be between 8 and 16.");
-                    boolean validPassword;
-                    do {
-                        System.out.println("\n");
-                        System.out.printf("%-61s", "Enter new password (length between 8 and 16) : ");
-                        newUserPasswordInput = getUserInputRegister();
-
-                        validPassword = Register.isValidatePassword(newUserPasswordInput);
-
-                        if(validPassword == true){
-                            System.out.println(newUserPasswordInput  + " is not a valid password.");
-                            System.out.println("Please enter again.");
-
-                            
-                        } else {
-                            System.out.println(newUserPasswordInput + " is a valid password.");
-                            register.editRegisterPasswordFile(userEmailAddressInput, newUserPasswordInput, registerArr, numRecordsTextFile);
-                            register.updatedVersion(registerArr, numRecordsTextFile);
-                            System.out.println("Change Successfully. You can login to the system with your new password.");
-                            break;
-                        }
-
-                    } while (validPassword == true);
-                }
-
-            }
-
-        } while (Register.checkRegisterEmailAddress(userEmailAddressInput, registerArr, numRecordsTextFile) == false);
-
-    }
-
-    /*public static void resetPassword(Register[] registerArr) throws IOException {
+    public static void resetPassword(Register[] registerArr) throws IOException {
         Scanner scannerRegister = new Scanner(System.in);
         String userEmailAddressInput;
         String newUserPasswordInput;
@@ -265,7 +196,7 @@ public class registerUI {
         numRecordsTextFile = register.readRegisterFile(registerArr);   
         
         do
-           {
+        {
                 System.out.printf("\n"); 
                 System.out.printf("%-61s", "Enter email address (EX: 2004jingsheng@gmail.com) : ");
                 userEmailAddressInput = scannerRegister.nextLine();
@@ -290,19 +221,7 @@ public class registerUI {
 
                         validPassword = Register.isValidatePassword(newUserPasswordInput);
 
-                        if(validPassword == true && Register.checkRegisterPassword(newUserPasswordInput , registerArr, numRecordsTextFile) == true){
-                            System.out.println(newUserPasswordInput  + " is not a valid password.");
-                            System.out.println("Got people used before already.");
-                            System.out.println("Please enter again.");
-
-                        }
-                        else if(validPassword == false && Register.checkRegisterPassword(newUserPasswordInput , registerArr, numRecordsTextFile) == true){
-                            System.out.println(newUserPasswordInput  + " is not a valid password.");
-                            System.out.println("Got people used before already.");
-                            System.out.println("Please enter again.");
-
-                        }
-                        else if(validPassword == true && Register.checkRegisterPassword(newUserPasswordInput , registerArr, numRecordsTextFile) == false){
+                        if(validPassword == true){
                             System.out.println(newUserPasswordInput  + " is not a valid password.");
                             System.out.println("Please enter again.");
 
@@ -311,16 +230,18 @@ public class registerUI {
                             System.out.println(newUserPasswordInput  + " is a valid password.");
                             register.editRegisterPasswordFile(userEmailAddressInput, newUserPasswordInput, registerArr, numRecordsTextFile);
                             register.updatedVersion(registerArr, numRecordsTextFile);
-                            System.out.println("Change Successfully. You can login to the system with your new password.");
+                            System.out.println("Change Successfully. You can now login to the system with your new password.");
                             break;  
                         }
 
-                    }while((validPassword == true) || Register.checkRegisterPassword(newUserPasswordInput, registerArr, numRecordsTextFile) == true);
+                    }while(validPassword == true);
                 }
                 
         }while(Register.checkRegisterEmailAddress(userEmailAddressInput, registerArr, numRecordsTextFile) == false);
   
         
      
-    } */
+    }
+        
 }
+

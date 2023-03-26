@@ -325,19 +325,16 @@ public class LinkedList<T extends Comparable<T>> implements LinkedListInterface<
     @Override
     //Return all value inside the list in string
     public String toString() {
-        //Create a temporary node for indication which node is accessing currently
-        Node tempNode = firstNode;
-        //Create a temporary string variable to store the value of the list
-        String listValue = "";
-        //While not the end of node
-        while (tempNode != null) {
-            //Concat the value into a string
-            listValue.concat(tempNode.data.toString() + " ");
-            //Move forward to next node
-            tempNode = tempNode.next;
+        String outputStr = "";
+        int count = 0;
+        Node currentNode = firstNode;
+        while (currentNode != null) {
+            count++;
+            outputStr += String.format("%2d", count) + "\t";
+            outputStr += currentNode.data + "\n";
+            currentNode = currentNode.next;
         }
-        //Return the value
-        return listValue;
+        return outputStr;
     }
 
     //Dont want import, create own node
