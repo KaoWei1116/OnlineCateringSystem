@@ -115,8 +115,14 @@ public class OnlineCateringSystem {
     }
 
     private static void customerMenu() throws IOException, FileNotFoundException, InterruptedException {
+        Ordering ordering = new Ordering();
+        ordering.readMenuItem();
+        ordering.createOrderFile();
+        ordering.readOrderFromFile();
+        
         int choice = 0;
         String word = "";
+        char startOrder;
         System.out.printf("\n");
         System.out.println("+++++++++++++++++++++++++++++++++++++");
         System.out.println("++   Welcome back " + finalUsername);
@@ -143,9 +149,12 @@ public class OnlineCateringSystem {
                     }
                     break;
                 case 2:
-                    Ordering ordering = new Ordering();
-                    ordering.readMenuItem();
                     ordering.printMenu();
+                    System.out.println("\nDo you want to make order? (Y-yes)");
+                    startOrder = scanner.next().charAt(0);
+                    if (startOrder == 'Y' || startOrder == 'y') {
+                        ordering.makeOrder();
+                    }
                     break;
                 case 3:
                     finalUsername = startingInterfaceMenu();

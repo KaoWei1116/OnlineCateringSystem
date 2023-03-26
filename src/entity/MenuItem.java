@@ -17,6 +17,10 @@ public class MenuItem implements Comparable<MenuItem> {
     private String desc;
     private double price;
 
+    public MenuItem() {
+    
+    }
+    
     public MenuItem(String itemID, String itemName, String category, String desc, double price) {
         this.itemID = itemID;
         this.itemName = itemName;
