@@ -9,10 +9,15 @@ import adt.LinkedList;
 import entity.MenuItem;
 import entity.Order;
 import entity.OrderItem;
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,6 +34,24 @@ public class Ordering {
     }
 
     private Scanner fileScanner;
+
+    public void sortMenuItemAscending() {
+        menuItemList.sortLinkedListAscending();
+    }
+
+    public void sortMenuItemDescending() {
+        menuItemList.sortLinkedListDescending();
+    }
+
+    public LinkedList<MenuItem> filterByCategory(String filterSetting) {
+        LinkedList<MenuItem> menuItemList = new LinkedList<MenuItem>();
+        for (int i = 1; i < this.menuItemList.getNumberOfEntries() + 1; i++) {
+            if (this.menuItemList.getEntry(i).getCategory().equals(filterSetting)) {
+                menuItemList.add(this.menuItemList.getEntry(i));
+            }
+        }
+        return menuItemList;
+    }
 
     public int readMenuItem() {
         try {                 //open file
@@ -55,16 +78,14 @@ public class Ordering {
 
     public void printMenu() {
         //Display menu
-        System.out.println("==============");
-        System.out.println("|| Menu     ||");
-        System.out.println("==============");
-
+        System.out.println("================================================================================================");
+        System.out.println("||                                            Menu                                            ||");
+        System.out.println("================================================================================================");
         for (int i = 1; i < menuItemList.getNumberOfEntries() + 1; i++) {
-            System.out.printf("%2d %20s %10s RM%2.2f \n", i, menuItemList.getEntry(i).getItemName(), menuItemList.getEntry(i).getCategory(), menuItemList.getEntry(i).getPrice());
-
+            System.out.printf("%2d    %50s       %10s         RM%-8.2f \n", i, menuItemList.getEntry(i).getItemName(), menuItemList.getEntry(i).getCategory(), menuItemList.getEntry(i).getPrice());
         }
     }
-    
+
     public void createOrderFile() {
         try {
             File file = new File("Order.txt");
@@ -78,13 +99,16 @@ public class Ordering {
             e.printStackTrace();
         }
     }
-    
-    private void writeOrderIntoFile() {
+
+    protected void writeOrderIntoFile() throws InterruptedException {
         try {
+            clsScreen();
             FileWriter writer = new FileWriter("Order.txt");
             writer.write(formatWriteOrder());
             writer.close();
-            System.out.println("Data successful save to text file");
+            System.out.println("Transaction Successful.");
+            TimeUnit.SECONDS.sleep(5);
+            clsScreen();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -104,7 +128,7 @@ public class Ordering {
         }
         return orderString;
     }
-    
+
     public void readOrderFromFile() {
         try {
             int index = 0;
@@ -127,7 +151,7 @@ public class Ordering {
                 }
             }
             reader.close();
-            System.out.println("Get data successful");
+            //System.out.println("Get data successful");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -135,7 +159,7 @@ public class Ordering {
     }
 
     public Order makeOrder() {
-        
+
         Scanner scanner = new Scanner(System.in);
         Order currentOrder = new Order();
         int currentOrderItemNo;
@@ -203,21 +227,32 @@ public class Ordering {
             System.out.println("Do you want to order another item? (Y-yes)");
             repeatOrder = scanner.next().charAt(0);
         } while (repeatOrder == 'Y' || repeatOrder == 'y');
-        orderList.add(new Order(currentOrder));
-        writeOrderIntoFile();
         return currentOrder;
     }
-    
+
     private MenuItem displayOrderDetail(int currentOrder, int orderQuantity) {
         MenuItem tempItem = new MenuItem();
         for (int i = 1; i <= menuItemList.getNumberOfEntries(); i++) {
             if (currentOrder == i) {
-                System.out.printf("%2s %-20s %-20s %-10s %-14s\n", "No", "Item Name", "Item Category", "Unit Price", "Order Quantity");
-                System.out.printf("%2d %-20s %-20s RM%-8.2f %-14d\n", i, menuItemList.getEntry(i).getItemName(), menuItemList.getEntry(i).getCategory(), menuItemList.getEntry(i).getPrice(), orderQuantity);
+                System.out.printf("%2s  %50s   %20s    %-10s    %14s\n", "No", "Item Name", "Item Category", "Unit Price", "Order Quantity");
+                System.out.println("==============================================================================================================");
+                System.out.printf("%2d  %50s    %20s    RM%-8.2f    %14d\n", i, menuItemList.getEntry(i).getItemName(), menuItemList.getEntry(i).getCategory(), menuItemList.getEntry(i).getPrice(), orderQuantity);
                 tempItem = menuItemList.getEntry(i);
             }
         }
         return tempItem;
     }
 
+    public static void clsScreen() {
+        try {
+            Robot pressbot = new Robot();
+            pressbot.keyPress(17);
+            pressbot.keyPress(76);
+            pressbot.keyRelease(17);
+            pressbot.keyRelease(76);
+            pressbot.delay(100);
+        } catch (AWTException ex) {
+            Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

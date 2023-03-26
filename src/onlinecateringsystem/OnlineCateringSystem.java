@@ -1,10 +1,10 @@
 package onlinecateringsystem;
 
+import entity.Order;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Scanner;
-import entity.Order;
 
 /**
  *
@@ -81,7 +81,7 @@ public class OnlineCateringSystem {
                     break;
             }
         } while (choice < 1 || choice > 4);
-        
+
         //return username
         return usernameInputCheck;
     }
@@ -90,28 +90,21 @@ public class OnlineCateringSystem {
         finalUsername = startingInterfaceMenu();
         while (finalUsername.equals("12312313") == false) {
             //admin account
-            if (finalUsername.equals("1") == true && finalUsername.equals("exit") == false)
-            {
+            if (finalUsername.equals("1") == true && finalUsername.equals("exit") == false) {
                 adminMenu();
-                
-            }   
-            else
-            {
+
+            } else {
                 //if first character is S then staff account
-                if(finalUsername.charAt(0) == 'S' && finalUsername.equals("exit") == false)
-                {
+                if (finalUsername.charAt(0) == 'S' && finalUsername.equals("exit") == false) {
                     staffMenu();
-                    
-                }
-                //otherwise customer account
-                else
-                {
+
+                } //otherwise customer account
+                else {
                     customerMenu();
-                    
+
                 }
             }
 
-            
         }
     }
 
@@ -120,7 +113,7 @@ public class OnlineCateringSystem {
         ordering.readMenuItem();
         ordering.createOrderFile();
         ordering.readOrderFromFile();
-        
+
         int choice = 0;
         String word = "";
         char startOrder;
@@ -144,8 +137,7 @@ public class OnlineCateringSystem {
                     viewUserProfile.viewUserProfile(finalUsername);
                     System.out.println("\nPress enter something to return to option menu...");
                     word = scanner.next();
-                    if(!word.isEmpty()) 
-                    {
+                    if (!word.isEmpty()) {
                         customerMenu();
                     }
                     break;
@@ -155,6 +147,12 @@ public class OnlineCateringSystem {
                     startOrder = scanner.next().charAt(0);
                     if (startOrder == 'Y' || startOrder == 'y') {
                         Order newOrder = new Order(ordering.makeOrder());
+                        Payment payment = new Payment();
+                        boolean paymentStatus = payment.makePayment(newOrder);
+                        if (paymentStatus == true) {
+                            ordering.orderList.add(new Order(newOrder));
+                            ordering.writeOrderIntoFile();
+                        }
                     }
                     break;
                 case 3:
@@ -167,7 +165,7 @@ public class OnlineCateringSystem {
             }
         } while (choice < 1 || choice > 3);
     }
-    
+
     private static void adminMenu() throws IOException, FileNotFoundException, InterruptedException {
         int choice = 0;
         System.out.printf("\n");
@@ -184,8 +182,8 @@ public class OnlineCateringSystem {
             System.out.print("\n");
             System.out.print("Enter an number : ");
             choice = scanner.nextInt();
-            switch(choice){
-               case 1:
+            switch (choice) {
+                case 1:
                     AdminOperation adminOperat = new AdminOperation();
                     adminOperat.addStaff();
                     break;
@@ -194,12 +192,12 @@ public class OnlineCateringSystem {
                     break;
                 default:
                     System.out.println("Please insert an integer between 1 to 2. Thank you.");
-                    break; 
+                    break;
             }
-                
-        } while (choice <1 || choice > 2);
+
+        } while (choice < 1 || choice > 2);
     }
-    
+
     private static void staffMenu() throws IOException, ParseException, FileNotFoundException, InterruptedException {
         int choice = 0;
         System.out.printf("\n");
@@ -211,14 +209,14 @@ public class OnlineCateringSystem {
             System.out.println("Staff Menu :");
             System.out.println("=====================================");
             System.out.println("|   1. Add Inventory                |");
-            System.out.println("|   2. Logout                       |");            
+            System.out.println("|   2. Logout                       |");
             System.out.println("=====================================");
             System.out.print("\n");
             System.out.print("Enter an number : ");
             choice = scanner.nextInt();
-            switch(choice){
-               case 1:
-                     System.out.print("\n");
+            switch (choice) {
+                case 1:
+                    System.out.print("\n");
                     System.out.println("=====================================");
                     System.out.println("|        Add Inventory Page         |");
                     System.out.println("=====================================");
@@ -230,9 +228,9 @@ public class OnlineCateringSystem {
                     break;
                 default:
                     System.out.println("Please insert an integer between 1 to 2. Thank you.");
-                    break; 
+                    break;
             }
-           
-        } while (choice <1 || choice > 2);
+
+        } while (choice < 1 || choice > 2);
     }
 }

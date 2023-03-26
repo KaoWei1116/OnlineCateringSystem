@@ -10,3 +10,11 @@ ORD1004
 #ITM0004, Macaron, 2, 10.0
 ORD1005
 #ITM0002, Strawberry Shortcake, 1, 15.0
+ORD1006
+#ITM0001, Apple Pie, 12, 120.0
+#ITM0012, Lamb Chop, 1, 18.0
+ORD1007
+#ITM0001, Apple Pie, 12, 120.0
+ORD1008
+#ITM0001, Apple Pie, 12, 120.0
+#ITM0005, Macaroon, 1, 8.0
