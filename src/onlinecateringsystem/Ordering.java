@@ -134,7 +134,7 @@ public class Ordering {
         }
     }
 
-    public void makeOrder() {
+    public Order makeOrder() {
         
         Scanner scanner = new Scanner(System.in);
         Order currentOrder = new Order();
@@ -205,6 +205,7 @@ public class Ordering {
         } while (repeatOrder == 'Y' || repeatOrder == 'y');
         orderList.add(new Order(currentOrder));
         writeOrderIntoFile();
+        return currentOrder;
     }
     
     private MenuItem displayOrderDetail(int currentOrder, int orderQuantity) {

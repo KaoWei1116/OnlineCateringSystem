@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Scanner;
+import entity.Order;
 
 /**
  *
@@ -153,7 +154,7 @@ public class OnlineCateringSystem {
                     System.out.println("\nDo you want to make order? (Y-yes)");
                     startOrder = scanner.next().charAt(0);
                     if (startOrder == 'Y' || startOrder == 'y') {
-                        ordering.makeOrder();
+                        Order newOrder = new Order(ordering.makeOrder());
                     }
                     break;
                 case 3:
