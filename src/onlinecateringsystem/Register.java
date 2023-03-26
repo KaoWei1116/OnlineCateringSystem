@@ -267,7 +267,7 @@ public class Register {
         boolean condition = false;
 
         if(password.length() < 8 || password.length() > 16) {
-            System.out.println("Password length should between 8 and 16.");
+            System.out.println("Password length should be between 8 and 16.");
             condition = true;
         }
 

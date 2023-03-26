@@ -52,7 +52,7 @@ public class Ordering {
         fileScanner.close();       //close file
         return menuItemCounter;
     }
-    
+
     public void printMenu() {
         //Display menu
         System.out.println("==============");
@@ -206,7 +206,7 @@ public class Ordering {
         orderList.add(new Order(currentOrder));
         writeOrderIntoFile();
     }
-
+    
     private MenuItem displayOrderDetail(int currentOrder, int orderQuantity) {
         MenuItem tempItem = new MenuItem();
         for (int i = 1; i <= menuItemList.getNumberOfEntries(); i++) {

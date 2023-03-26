@@ -15,10 +15,13 @@ public class Login {
 		File file = new File("CustomerDetails.txt");
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);
+                File file2 = new File("StaffDetails.txt");
+                FileReader fr2 = new FileReader(file2);
+		BufferedReader br2 = new BufferedReader(fr2);
                 
 		String data;
 		try {
-			while ((data=br.readLine()) != null) {
+			while ((data=br.readLine()) != null || (data=br2.readLine()) != null) {
 				words=data.split("[|]");
 				count3++;
 				for (String word : words) {
@@ -40,6 +43,8 @@ public class Login {
                     try{
                            br.close();
                            fr.close();
+                           br2.close();
+                           fr2.close();
                           
                            
                     }catch (IOException e) {
@@ -83,11 +88,21 @@ public class Login {
             String finalUsername = "exit";
             
 		do {
-			System.out.printf("\nEnter your username  : ");
+			System.out.printf("\nEnter your username or staffID : ");
 			username = getUserInputLogin();
 			System.out.printf("\nEnter your password  : ");
 			password = getUserInputLogin();
 			checkValid = check(username, password);
+                        //admin login entrance
+                        if(username.equals("t97#") && password.equals("AgileAssignment")){
+                            System.out.println("\nLogin successfully! Welcome Admin.");
+                            finalUsername = "1";
+                            tryNumber = 0;
+                            break;
+                        }
+                        //user login entrance
+                        else
+                        {
 				if(checkValid == 1) {
 					System.out.println("\nLogin successfully!");
                                         finalUsername = username;
@@ -112,6 +127,7 @@ public class Login {
                                     tryNumber++;
                                     
                                 }
+                        }
                                 
                             if(tryNumber > 2)
                             {
