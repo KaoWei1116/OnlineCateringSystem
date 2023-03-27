@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -20,12 +22,11 @@ import java.util.regex.Pattern;
  */
 public class Inventory {
     private String itemName;
-    private String itemType;
+    private static String itemType;
     private String itemMinimumQuantity;
     private String itemQuantityOnHand;
     private String itemUnitPrice;
     private String itemAddedDate;
-    private String itemExpiryDate;
     private String supplierName;
     private String supplierEmailAddress;
     
@@ -34,14 +35,12 @@ public class Inventory {
         
     }
 
-    public Inventory(String itemName, String itemType, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String itemExpiryDate, String supplierName, String supplierEmailAddress) {
+    public Inventory(String itemName, String itemType, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress) {
         this.itemName = itemName;
         this.itemType = itemType;
         this.itemMinimumQuantity = itemMinimumQuantity;
         this.itemQuantityOnHand = itemQuantityOnHand;
-        this.itemUnitPrice = itemUnitPrice;
-        this.itemAddedDate = itemAddedDate;
-        this.itemExpiryDate = itemExpiryDate;
+        this.itemUnitPrice = itemUnitPrice;   
         this.supplierName = supplierName;
         this.supplierEmailAddress = supplierEmailAddress;
     }
@@ -50,7 +49,7 @@ public class Inventory {
         return itemName;
     }
 
-    public String getItemType() {
+    public static String getItemType() {
         return itemType;
     }
 
@@ -67,10 +66,6 @@ public class Inventory {
 
     public String getItemAddedDate() {
         return itemAddedDate;
-    }
-
-    public String getItemExpiryDate() {
-        return itemExpiryDate;
     }
 
     public String getSupplierName() {
@@ -105,12 +100,11 @@ public class Inventory {
            String itemQuantityOnHand = y.next();
            String itemUnitPrice = y.next();
            String itemAddedDate = y.next();
-           String itemExpiryDate = y.next();
            String supplierName = y.next();
            String supplierEmailAddress = y.next();
            
 
-           inventoryArr[k] = new Inventory(itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, itemExpiryDate, supplierName, supplierEmailAddress);
+           inventoryArr[k] = new Inventory(itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress);
            y.nextLine();
            
            k++;
@@ -123,7 +117,7 @@ public class Inventory {
 
     }
     
-     public static void appendInventoryFile(String itemName, String itemType, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String itemExpiryDate, String supplierName, String supplierEmailAddress) throws IOException{
+     public static void appendInventoryFile(String itemName, String itemTypeInput, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String supplierName, String supplierEmailAddress) throws IOException{
         
         FileWriter fw = null;
         BufferedWriter bw = null;
@@ -133,7 +127,27 @@ public class Inventory {
              bw = new BufferedWriter(fw);
              pw = new PrintWriter(bw);
              
-             pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, itemExpiryDate, supplierName, supplierEmailAddress);
+             LocalDateTime oldFormatDateTime = LocalDateTime.now();
+             DateTimeFormatter newFormatDate = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+             String itemAddedDate = oldFormatDateTime.format(newFormatDate); 
+             
+             if(Integer.parseInt(itemTypeInput) == 1)
+             {
+                 itemType = "Dessert";
+                 
+             }
+             if(Integer.parseInt(itemTypeInput) == 2)
+             {
+                 itemType = "Main Dish";
+                 
+             }
+             if(Integer.parseInt(itemTypeInput) == 3)
+             {
+                 itemType = "Appetizer";
+                 
+             }
+             
+             pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|\n", itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress);
              System.out.print("\n");
              System.out.println("Data Added Into Text File Successfully.");
              pw.flush();
@@ -163,22 +177,34 @@ public class Inventory {
         return condition;
     }
     
-    public static boolean isValidateItemType(String itemType) {
-        boolean condition = true;
+    public static int isValidateItemType(String itemType) {
+       int condition = 0;
         
-        Pattern patternItemType = Pattern.compile("^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$");
-        Matcher matcherItemType = patternItemType.matcher(itemType);
+       try
+       {
+           if(Integer.parseInt(itemType) >= 1 && Integer.parseInt(itemType) <= 3)
+           {
+               condition = 0;
+               
+           }
+           if(Integer.parseInt(itemType) <= 0)
+           {
+               condition = 1;
+               
+           }
+           if(Integer.parseInt(itemType) > 3)
+           {
+               condition = 2;
+               
+           }
+           
+       }
+       catch (NumberFormatException e)
+       {
+           condition = 3;
+       }
         
-        if(matcherItemType.matches()) {
-            condition = false;
-            
-        }
-        else
-        {
-            condition = true;
-        }
-        
-        return condition;
+       return condition;
         
     }
     
@@ -272,76 +298,6 @@ public class Inventory {
         return condition;
     }
     
-    public static boolean isValidateItemAddedDate(String itemAddedDate) throws ParseException {
-        
-        boolean condition = true;
-        Date date1;
-        Date date2 = new Date();
-        
-        SimpleDateFormat checkItemAddedDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        
-        checkItemAddedDateFormat.setLenient(false);
-        
-        try {
-            date1 = checkItemAddedDateFormat.parse(itemAddedDate);
-            
-        }
-        catch (ParseException pe) {
-            System.out.println(pe.getMessage());
-            condition = false;
-            return condition;
-            
-        }
-        
-        if(date1.after(date2)) {
-            condition = true;
-                
-        }
-        else
-        {
-            condition = false;
-        }
-        
-        return condition;
-    }
-    
-    public static boolean isValidateItemExpiryDate(String itemExpiryDate, String itemAddedDate) throws ParseException {
-        
-        boolean condition = true;
-        Date date1;
-        Date date2 = new Date();
-        
-        SimpleDateFormat checkItemAddedDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        SimpleDateFormat checkItemExpiryDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        
-        checkItemAddedDateFormat.setLenient(false);
-        checkItemExpiryDateFormat.setLenient(false);
-        
-        try {
-            date1 = checkItemAddedDateFormat.parse(itemAddedDate);
-            date2 = checkItemExpiryDateFormat.parse(itemExpiryDate);
-            
-            
-        }
-        catch (ParseException pe) {
-            System.out.println(pe.getMessage());
-            condition = false;
-            return condition;
-            
-        }
-        
-        if(date2.after(date1)) {
-            condition = true;
-            
-        }
-        else
-        {
-            condition = false;
-            
-        }
-        
-        return condition;
-    }
     
     public static boolean isValidateSupplierName(String supplierName) {
         boolean condition = true;

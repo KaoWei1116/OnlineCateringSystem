@@ -19,7 +19,6 @@ public class InventoryUI {
         String itemMinimumQuantityInput;
         String itemQuantityOnHandInput;
         String itemUnitPriceInput;
-        String itemAddedDateInput;
         String itemExpiryDateInput;
         String supplierNameInput;
         String supplierEmailAddressInput;
@@ -51,12 +50,24 @@ public class InventoryUI {
         do
         {
                 System.out.printf("\n"); 
-                System.out.printf("%-61s", "Enter item type : ");
+                System.out.printf("%-61s", "Enter item type (1- Dessert, 2- Main Dish, 3- Appetizer): ");
                 itemTypeInput = getUserInputInventory();
                 
-                if(Inventory.isValidateItemType(itemTypeInput) == true){
+                if(Inventory.isValidateItemType(itemTypeInput) == 1){
                     System.out.println(itemTypeInput + " is not a valid item type."); 
-                    System.out.println("The item type should not contain digits.");
+                    System.out.println("The item type should be between 0 and 3.");
+                    System.out.println("Please enter again.");
+                    
+                }
+                else if(Inventory.isValidateItemType(itemTypeInput) == 2){
+                    System.out.println(itemTypeInput + " is not a valid item type."); 
+                    System.out.println("The item type should be between 0 and 3.");
+                    System.out.println("Please enter again.");
+                    
+                }
+                else if(Inventory.isValidateItemType(itemTypeInput) == 3){
+                    System.out.println(itemTypeInput + " is not a valid item type."); 
+                    System.out.println("The item type should contain digits which should be between 0 and 3.");
                     System.out.println("Please enter again.");
                     
                 }
@@ -65,7 +76,7 @@ public class InventoryUI {
                     
                 }
                 
-        }while(Inventory.isValidateItemType(itemTypeInput) == true);
+        }while(Inventory.isValidateItemType(itemTypeInput) != 0);
         
         do
         {
@@ -144,50 +155,7 @@ public class InventoryUI {
                              
         }while(Inventory.isValidateItemUnitPrice(itemUnitPriceInput) == true);
         
-        do
-        {
-                System.out.printf("\n");
-                System.out.printf("%-61s", "Enter item added date (EX: yyyy/MM/dd) : ");
-                itemAddedDateInput = getUserInputInventory();
-                               
-                if(Inventory.isValidateItemAddedDate(itemAddedDateInput) == false)
-                {
-                    System.out.println(itemAddedDateInput + " is not a valid item added date.");
-                    System.out.println("The item added date must be in this format (yyyy/MM/dd).");
-                    System.out.println("The item added date must be after today.");
-                    System.out.println("Please enter again.");
-                    
-                }
-                else
-                {
-                    System.out.println(itemAddedDateInput + " is a valid item added date.");
-                    
-                }
-                
-        }while(Inventory.isValidateItemAddedDate(itemAddedDateInput) == false);
-        
-        do
-        {
-                System.out.printf("\n");
-                System.out.printf("%-61s", "Enter item expiry date (EX: YYYY/MM/DD) : ");
-                itemExpiryDateInput = getUserInputInventory();
-                
-                if(Inventory.isValidateItemExpiryDate(itemExpiryDateInput, itemAddedDateInput) == false)
-                {
-                    System.out.println(itemExpiryDateInput + " is not a valid item expiry date.");
-                    System.out.println("The item expiry date must be in this format (yyyy/MM/dd).");
-                    System.out.println("The item expiry date must be after the item added date.");
-                    System.out.println("Please enter again.");
-                    
-                }
-                else
-                {
-                    System.out.println(itemExpiryDateInput + " is a valid item expiry date.");
-                    
-                }
-                
-        }while(Inventory.isValidateItemExpiryDate(itemExpiryDateInput, itemAddedDateInput) == false);
-        
+
         do
         {
                 System.out.printf("\n"); 
@@ -231,7 +199,7 @@ public class InventoryUI {
         confirmAddInventory = getUserInputInventory().charAt(0);
            
         if(Character.toUpperCase(confirmAddInventory) == 'Y'){  
-            Inventory.appendInventoryFile(itemNameInput, itemTypeInput, itemMinimumQuantityInput, itemQuantityOnHandInput, itemUnitPriceInput, itemAddedDateInput, itemExpiryDateInput, supplierNameInput, supplierEmailAddressInput);
+            Inventory.appendInventoryFile(itemNameInput, itemTypeInput, itemMinimumQuantityInput, itemQuantityOnHandInput, itemUnitPriceInput, supplierNameInput, supplierEmailAddressInput);
             System.out.println("Added Successfully");
             
                 
