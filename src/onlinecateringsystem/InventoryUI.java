@@ -158,28 +158,6 @@ public class InventoryUI {
 
         do
         {
-                System.out.printf("\n");
-                System.out.printf("%-61s", "Enter item expiry date (EX: YYYY/MM/DD) : ");
-                itemExpiryDateInput = getUserInputInventory();
-                
-                if(Inventory.isValidateItemExpiryDate(itemExpiryDateInput) == false)
-                {
-                    System.out.println(itemExpiryDateInput + " is not a valid item expiry date.");
-                    System.out.println("The item expiry date must be in this format (yyyy/MM/dd).");
-                    System.out.println("The item expiry date must be after the item added date.");
-                    System.out.println("Please enter again.");
-                    
-                }
-                else
-                {
-                    System.out.println(itemExpiryDateInput + " is a valid item expiry date.");
-                    
-                }
-                
-        }while(Inventory.isValidateItemExpiryDate(itemExpiryDateInput) == false);
-        
-        do
-        {
                 System.out.printf("\n"); 
                 System.out.printf("%-61s", "Enter supplier name : ");
                 supplierNameInput = getUserInputInventory();
@@ -221,7 +199,7 @@ public class InventoryUI {
         confirmAddInventory = getUserInputInventory().charAt(0);
            
         if(Character.toUpperCase(confirmAddInventory) == 'Y'){  
-            Inventory.appendInventoryFile(itemNameInput, itemTypeInput, itemMinimumQuantityInput, itemQuantityOnHandInput, itemUnitPriceInput, itemExpiryDateInput, supplierNameInput, supplierEmailAddressInput);
+            Inventory.appendInventoryFile(itemNameInput, itemTypeInput, itemMinimumQuantityInput, itemQuantityOnHandInput, itemUnitPriceInput, supplierNameInput, supplierEmailAddressInput);
             System.out.println("Added Successfully");
             
                 

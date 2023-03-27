@@ -27,7 +27,6 @@ public class Inventory {
     private String itemQuantityOnHand;
     private String itemUnitPrice;
     private String itemAddedDate;
-    private String itemExpiryDate;
     private String supplierName;
     private String supplierEmailAddress;
     
@@ -36,13 +35,12 @@ public class Inventory {
         
     }
 
-    public Inventory(String itemName, String itemType, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String itemExpiryDate, String supplierName, String supplierEmailAddress) {
+    public Inventory(String itemName, String itemType, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress) {
         this.itemName = itemName;
         this.itemType = itemType;
         this.itemMinimumQuantity = itemMinimumQuantity;
         this.itemQuantityOnHand = itemQuantityOnHand;
         this.itemUnitPrice = itemUnitPrice;   
-        this.itemExpiryDate = itemExpiryDate;
         this.supplierName = supplierName;
         this.supplierEmailAddress = supplierEmailAddress;
     }
@@ -68,10 +66,6 @@ public class Inventory {
 
     public String getItemAddedDate() {
         return itemAddedDate;
-    }
-
-    public String getItemExpiryDate() {
-        return itemExpiryDate;
     }
 
     public String getSupplierName() {
@@ -106,12 +100,11 @@ public class Inventory {
            String itemQuantityOnHand = y.next();
            String itemUnitPrice = y.next();
            String itemAddedDate = y.next();
-           String itemExpiryDate = y.next();
            String supplierName = y.next();
            String supplierEmailAddress = y.next();
            
 
-           inventoryArr[k] = new Inventory(itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, itemExpiryDate, supplierName, supplierEmailAddress);
+           inventoryArr[k] = new Inventory(itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress);
            y.nextLine();
            
            k++;
@@ -124,7 +117,7 @@ public class Inventory {
 
     }
     
-     public static void appendInventoryFile(String itemName, String itemTypeInput, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemExpiryDate, String supplierName, String supplierEmailAddress) throws IOException{
+     public static void appendInventoryFile(String itemName, String itemTypeInput, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String supplierName, String supplierEmailAddress) throws IOException{
         
         FileWriter fw = null;
         BufferedWriter bw = null;
@@ -154,7 +147,7 @@ public class Inventory {
                  
              }
              
-             pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, itemExpiryDate, supplierName, supplierEmailAddress);
+             pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|\n", itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress);
              System.out.print("\n");
              System.out.println("Data Added Into Text File Successfully.");
              pw.flush();
@@ -305,41 +298,6 @@ public class Inventory {
         return condition;
     }
     
-    
-    public static boolean isValidateItemExpiryDate(String itemExpiryDate) throws ParseException {
-        
-        boolean condition = true;
-        Date date1 = new Date();
-        Date date2 = new Date();
-        
-        SimpleDateFormat checkItemExpiryDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        
-        checkItemExpiryDateFormat.setLenient(false);
-        
-        try {
-            date2 = checkItemExpiryDateFormat.parse(itemExpiryDate);
-            
-            
-        }
-        catch (ParseException pe) {
-            System.out.println(pe.getMessage());
-            condition = false;
-            return condition;
-            
-        }
-        
-        if(date2.after(date1)) {
-            condition = true;
-            
-        }
-        else
-        {
-            condition = false;
-            
-        }
-        
-        return condition;
-    }
     
     public static boolean isValidateSupplierName(String supplierName) {
         boolean condition = true;

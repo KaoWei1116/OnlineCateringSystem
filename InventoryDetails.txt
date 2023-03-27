@@ -1,4 +1,4 @@
-Chicken Chop|Main Dish|50|60|7.90|2023/03/24|2023/05/18|Simple Incorporated|04simple@gmail.com|
-VanillaCake|Dessert|50|80|2.70|2023/03/26|2023/09/12|Simple Incorporated|04simple@gmail.com|
-IceCream|Dessert|50|70|5.20|2023/03/26|2023/05/21|Tzehao|tzehao@gmail.com|
-Ice Cream|Dessert|40|50|3.99|2023/03/27|2023/04/29|Ok|ok@gmail.com|
+Chicken Chop|Main Dish|50|60|7.90|2023/03/24|Simple Incorporated|04simple@gmail.com|
+VanillaCake|Dessert|50|80|2.70|2023/03/26|Simple Incorporated|04simple@gmail.com|
+IceCream|Dessert|50|70|5.20|2023/03/26|Tzehao|tzehao@gmail.com|
+Ice Cream|Dessert|40|50|3.99|2023/03/27|Ok|ok@gmail.com|
