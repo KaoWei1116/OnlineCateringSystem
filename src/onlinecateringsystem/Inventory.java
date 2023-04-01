@@ -1,8 +1,10 @@
 
 package onlinecateringsystem;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,8 +23,12 @@ import java.util.regex.Pattern;
  * @author Mok Chun Kit Calvin
  */
 public class Inventory {
+    
+    private String inventoryID = "I0";
+    private static int inventoryNumber = 1;
+    private static String latestInventoryID;
     private String itemName;
-    private static String itemType;
+    private String itemCategory;
     private String itemMinimumQuantity;
     private String itemQuantityOnHand;
     private String itemUnitPrice;
@@ -34,28 +40,61 @@ public class Inventory {
     {
         
     }
-
-    public Inventory(String itemName, String itemType, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress) {
+    
+    public Inventory(String inventoryID, String itemName, String itemCategory, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress) {
+        this.inventoryID = inventoryID;
+        Inventory.inventoryNumber++;
+        inventoryID = inventoryID + inventoryNumber;
         this.itemName = itemName;
-        this.itemType = itemType;
+        this.itemCategory = itemCategory;
         this.itemMinimumQuantity = itemMinimumQuantity;
         this.itemQuantityOnHand = itemQuantityOnHand;
         this.itemUnitPrice = itemUnitPrice;   
+        this.itemAddedDate = itemAddedDate;
+        this.supplierName = supplierName;
+        this.supplierEmailAddress = supplierEmailAddress;
+    }
+    
+    public Inventory(String itemName, String itemCategory, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress) {
+        char firstDigit = latestInventoryID.charAt(2);
+        int firstDigitValue = Character.getNumericValue(firstDigit);
+        char secondDigit = latestInventoryID.charAt(3);
+        int secondDigitValue = Character.getNumericValue(secondDigit);
+        int sequence = (firstDigitValue * 10) + (secondDigitValue * 1);
+        sequence++;
+        Inventory.inventoryNumber = sequence;
+        inventoryID = inventoryID + inventoryNumber;
+        this.itemName = itemName;
+        this.itemCategory = itemCategory;
+        this.itemMinimumQuantity = itemMinimumQuantity;
+        this.itemQuantityOnHand = itemQuantityOnHand;
+        this.itemUnitPrice = itemUnitPrice;   
+        this.itemAddedDate = itemAddedDate;
         this.supplierName = supplierName;
         this.supplierEmailAddress = supplierEmailAddress;
     }
 
+    public String getInventoryID() {
+        return inventoryID;
+    }
+    
     public String getItemName() {
         return itemName;
     }
 
-    public static String getItemType() {
-        return itemType;
+    public String getItemCategory() {
+        return itemCategory;
     }
+
+    public void setItemAddedDate(String itemAddedDate) {
+        this.itemAddedDate = itemAddedDate;
+    }
+   
 
     public String getItemMinimumQuantity() {
         return itemMinimumQuantity;
     }
+    
     public String getItemQuantityOnHand() {
         return itemQuantityOnHand;
     }
@@ -76,11 +115,12 @@ public class Inventory {
         return supplierEmailAddress;
     }
     
-    //refer to systemProcess.java, newReservationUI.java
-    
     private Scanner y;
-    public int readInventoryFile(Inventory[] inventoryArr){
-     try{                 //open file
+    public int readInventoryFile(Inventory[] inventoryArr){    
+    
+    inventoryNumber = 1;    
+        
+    try{                 //open file
           y = new Scanner(new File("InventoryDetails.txt"));
          
               
@@ -94,8 +134,9 @@ public class Inventory {
     y.useDelimiter("[|]");
        
     while(y.hasNext()) {      //do while loop - read file content
+           String inventoryID = y.next();
            String itemName = y.next();
-           String itemType = y.next();
+           String itemCategory = y.next();
            String itemMinimumQuantity = y.next();
            String itemQuantityOnHand = y.next();
            String itemUnitPrice = y.next();
@@ -104,12 +145,13 @@ public class Inventory {
            String supplierEmailAddress = y.next();
            
 
-           inventoryArr[k] = new Inventory(itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress);
+           inventoryArr[k] = new Inventory(inventoryID, itemName, itemCategory, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress);          
            y.nextLine();
            
            k++;
-
+           latestInventoryID = inventoryID;
        }
+    
     
        y.close();       //close file
        
@@ -117,7 +159,7 @@ public class Inventory {
 
     }
     
-     public static void appendInventoryFile(String itemName, String itemTypeInput, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String supplierName, String supplierEmailAddress) throws IOException{
+    public static void appendInventoryFile(Inventory inventory) throws IOException{
         
         FileWriter fw = null;
         BufferedWriter bw = null;
@@ -126,28 +168,13 @@ public class Inventory {
              fw = new FileWriter("InventoryDetails.txt", true);
              bw = new BufferedWriter(fw);
              pw = new PrintWriter(bw);
-             
+               
              LocalDateTime oldFormatDateTime = LocalDateTime.now();
              DateTimeFormatter newFormatDate = DateTimeFormatter.ofPattern("yyyy/MM/dd");
              String itemAddedDate = oldFormatDateTime.format(newFormatDate); 
+             inventory.setItemAddedDate(itemAddedDate);
              
-             if(Integer.parseInt(itemTypeInput) == 1)
-             {
-                 itemType = "Dessert";
-                 
-             }
-             if(Integer.parseInt(itemTypeInput) == 2)
-             {
-                 itemType = "Main Dish";
-                 
-             }
-             if(Integer.parseInt(itemTypeInput) == 3)
-             {
-                 itemType = "Appetizer";
-                 
-             }
-             
-             pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|\n", itemName, itemType, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress);
+             pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventory.inventoryID, inventory.itemName, inventory.getItemCategory(), inventory.itemMinimumQuantity, inventory.itemQuantityOnHand, inventory.itemUnitPrice, itemAddedDate, inventory.supplierName, inventory.supplierEmailAddress);
              System.out.print("\n");
              System.out.println("Data Added Into Text File Successfully.");
              pw.flush();
@@ -158,6 +185,33 @@ public class Inventory {
    
     }
      
+    public static void deleteInventoryFromFile(Inventory[] inventoryArr, int numOfRecords) throws IOException {
+       
+        File oldFile = new File("InventoryDetails.txt");
+        oldFile.delete();
+        
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        PrintWriter pw = null;
+        
+        fw = new FileWriter("InventoryDetails.txt", true);
+        bw = new BufferedWriter(fw);
+        pw = new PrintWriter(bw);
+
+        for (int i = 0; i < numOfRecords; i++) {
+            pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventoryArr[i].getInventoryID(), inventoryArr[i].getItemName(), inventoryArr[i].getItemCategory(), inventoryArr[i].getItemMinimumQuantity(), inventoryArr[i].getItemQuantityOnHand(), inventoryArr[i].getItemUnitPrice(), inventoryArr[i].getItemAddedDate(), inventoryArr[i].getSupplierName(), inventoryArr[i].getSupplierEmailAddress());
+
+        }
+
+
+        pw.flush();
+        pw.close();
+        bw.close();
+        fw.close();
+
+        
+    }
+    
     public static boolean isValidateItemName(String itemName) {
         boolean condition = true;
         
@@ -177,22 +231,22 @@ public class Inventory {
         return condition;
     }
     
-    public static int isValidateItemType(String itemType) {
+    public static int isValidateItemCategory(String itemCategory) {
        int condition = 0;
         
        try
        {
-           if(Integer.parseInt(itemType) >= 1 && Integer.parseInt(itemType) <= 3)
+           if(Integer.parseInt(itemCategory) >= 1 && Integer.parseInt(itemCategory) <= 3)
            {
                condition = 0;
                
            }
-           if(Integer.parseInt(itemType) <= 0)
+           if(Integer.parseInt(itemCategory) <= 0)
            {
                condition = 1;
                
            }
-           if(Integer.parseInt(itemType) > 3)
+           if(Integer.parseInt(itemCategory) > 3)
            {
                condition = 2;
                
@@ -298,7 +352,6 @@ public class Inventory {
         return condition;
     }
     
-    
     public static boolean isValidateSupplierName(String supplierName) {
         boolean condition = true;
         
@@ -336,5 +389,244 @@ public class Inventory {
         
         return condition;
     }
+    
+    public static boolean checkInventoryID(String inventoryID, Inventory[] inventory, int numOfRecords) {
+        boolean condition = true;
+        
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0) {
+                condition = true;
+                break;
+                
+            }
+            else
+            {
+                condition = false;
+                
+            }
+        }
+        
+        return condition;
+        
+    }
+    
+    public static void getOldCategory(String inventoryID, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                System.out.printf("Before : " + inventory[i].itemCategory);
+                break;
+            }
+        }
+    }
+    
+    public static void editInventoryCategoryFile(String inventoryID, String newCategory, Inventory[] inventory, int numOfRecords) {
+        if(newCategory.equals("1") == true)
+        {
+            newCategory = "Dessert";
+            
+        }
+        else if(newCategory.equals("2") == true)
+        {
+            newCategory = "Main Dish";
+            
+        }
+        else
+        {
+            newCategory = "Appetizer";
+            
+        }
+        
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                inventory[i].itemCategory = newCategory;
+            }
+        }
+        
+    }
+    
+    public static void getOldMinimumQuantity(String inventoryID, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                System.out.printf("Before : " + inventory[i].itemMinimumQuantity);
+                break;
+            }
+        }
+    }
+    
+    public static void editInventoryMinimumQuantityFile(String inventoryID, String newMinimumQuantity, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                inventory[i].itemMinimumQuantity = newMinimumQuantity;
+            }
+        }
+    }
+    
+    public static String getOldQuantityOnHand(String inventoryID, Inventory[] inventory, int numOfRecords) {
+        String oldInput = "";
+        for(int i = 0; i < numOfRecords; i++) 
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                System.out.printf("Before : " + inventory[i].getItemQuantityOnHand());
+                oldInput = inventory[i].getItemQuantityOnHand();
+                break;
+            }
+        }
+        return oldInput;
+    }
+    
+    public static void editInventoryQuantityOnHandFile(String inventoryID, String newQuantityOnHand, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                inventory[i].itemQuantityOnHand = newQuantityOnHand;
+            }
+        }
+    }
+    
+    public static void getOldUnitPrice(String inventoryID, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                System.out.printf("Before : " + inventory[i].getItemUnitPrice());
+                break;
+            }
+        }
+    }
+    
+    public static void editInventoryUnitPriceFile(String inventoryID, String newUnitPrice, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                inventory[i].itemUnitPrice = newUnitPrice;
+            }
+        }
+    }
+    
+    public static void getOldSupplierName(String inventoryID, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                System.out.printf("Before : " + inventory[i].getSupplierName());
+                break;
+            }
+        }
+    }
+    
+    public static void editInventorySupplierNameFile(String inventoryID, String newSupplierName, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                inventory[i].supplierName = newSupplierName;
+            }
+        }
+    }
+    
+    public static void getOldSupplierEmailAddress(String inventoryID, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                System.out.printf("Before : " + inventory[i].getSupplierEmailAddress());
+                break;
+            }
+        }
+    }
+    
+    public static void editInventorySupplierEmailAddressFile(String inventoryID, String newSupplierEmailAddress, Inventory[] inventory, int numOfRecords) {
+        for(int i = 0; i < numOfRecords; i++)
+        {
+            if(inventoryID.compareTo(inventory[i].getInventoryID()) == 0)
+            {
+                inventory[i].supplierEmailAddress = newSupplierEmailAddress;
+            }
+        }
+    }
+    
+    public static int validateUpdatedRestockItemQuantityOnHand(String itemQuantityRestock) {
+        int condition = 0;
+        
+        try 
+        {
+            if(Integer.parseInt(itemQuantityRestock) > 0)
+            {
+                condition = 0;
+            }
+            if(Integer.parseInt(itemQuantityRestock) <= 0)
+            {
+                condition = 1;
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            condition = 2;
+            
+        }
+        
+        return condition;
+    }
+    
+    public static int validateUpdatedUsedItemQuantityOnHand(String itemQuantityRestock) {
+        int condition = 0;
+        
+        try 
+        {
+            if(Integer.parseInt(itemQuantityRestock) > 0)
+            {
+                condition = 0;
+            }
+            if(Integer.parseInt(itemQuantityRestock) <= 0)
+            {
+                condition = 1;
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            condition = 2;
+            
+        }
+        
+        return condition;
+    }
+    
+    public static void updatedVersion(Inventory[] inventoryArr, int numOfRecords) throws IOException {
+        File oldFile = new File("InventoryDetails.txt");
+        oldFile.delete();
+        
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        PrintWriter pw = null;
+        
+        fw = new FileWriter("InventoryDetails.txt", true);
+        bw = new BufferedWriter(fw);
+        pw = new PrintWriter(bw);
+
+        for (int i = 0; i < numOfRecords; i++) {
+            pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventoryArr[i].getInventoryID(), inventoryArr[i].getItemName(), inventoryArr[i].getItemCategory(), inventoryArr[i].getItemMinimumQuantity(), inventoryArr[i].getItemQuantityOnHand(), inventoryArr[i].getItemUnitPrice(), inventoryArr[i].getItemAddedDate(), inventoryArr[i].getSupplierName(), inventoryArr[i].getSupplierEmailAddress());
+
+        }
+
+
+        pw.flush();
+        pw.close();
+        bw.close();
+        fw.close();
+    }
+    
+    
     
 }
