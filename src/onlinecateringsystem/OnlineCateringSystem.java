@@ -209,7 +209,10 @@ public class OnlineCateringSystem {
             System.out.println("Staff Menu :");
             System.out.println("=====================================");
             System.out.println("|   1. Add Inventory                |");
-            System.out.println("|   2. Logout                       |");
+            System.out.println("|   2. View All Inventory           |");
+            System.out.println("|   3. Delete An Inventory          |");
+            System.out.println("|   4. Update Inventory             |");
+            System.out.println("|   5. Logout                       |");
             System.out.println("=====================================");
             System.out.print("\n");
             System.out.print("Enter an number : ");
@@ -220,17 +223,38 @@ public class OnlineCateringSystem {
                     System.out.println("=====================================");
                     System.out.println("|        Add Inventory Page         |");
                     System.out.println("=====================================");
-                    Inventory[] inventoryArr = new Inventory[20];
+                    Inventory[] inventoryArr = new Inventory[30];
                     InventoryUI.inventoryModule(inventoryArr);
                     break;
                 case 2:
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|      View All Inventory Page      |");
+                    System.out.println("=====================================");
+                    InventoryUI.displayAllInventoryDetails();
+                    break;
+                case 3:
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|      Delete An Inventory Page     |");
+                    System.out.println("=====================================");
+                    InventoryUI.deleteAnInventory();
+                    break;
+                case 4:
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|    Update Inventory Details Page   |");
+                    System.out.println("=====================================");
+                    Inventory[] updateInventoryArr = new Inventory[30];
+                    InventoryUI.updateInventory(updateInventoryArr);     
+                case 5:
                     finalUsername = startingInterfaceMenu();
                     break;
                 default:
-                    System.out.println("Please insert an integer between 1 to 2. Thank you.");
+                    System.out.println("Please insert an integer between 1 to 5. Thank you.");
                     break;
             }
 
-        } while (choice < 1 || choice > 2);
+        } while (choice < 1 || choice > 5);
     }
 }
