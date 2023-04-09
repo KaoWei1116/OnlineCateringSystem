@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
  * @author tzeha
  */
 public class AdminOperation {
+
     // Create Staff txt
     public void createStaffFile() {
         try {
@@ -35,119 +36,100 @@ public class AdminOperation {
         }
 
     }
-    
+
     //Read Staff txt
-    private Scanner scanner;
-    public ArrayList<Staff> readRStaffFile(){
+    public Scanner scanner;
+
+    public ArrayList<Staff> readRStaffFile() {
+
         ArrayList<Staff> staffList = new ArrayList<>();
-     try{                 //open file
-          scanner = new Scanner(new File("StaffDetails.txt"));
-         
-              
-    }
-    catch(Exception e){
-          System.out.println("Error ! Could not find the file.");
-    }
- 
-    
-    scanner.useDelimiter("[|]");
-       
-    while(scanner.hasNext()) {      //do while loop - read file content
-           String staffID = scanner.next();
-           String password = scanner.next();
-           String staffName = scanner.next();
-           char gender = scanner.next().charAt(0);
-           String personalEmail = scanner.next();
-           String phone = scanner.next();
+        try {                 //open file
+            scanner = new Scanner(new File("StaffDetails.txt"));
 
-           Staff staff= new Staff(staffID, password, staffName,gender ,personalEmail, phone);
-           staffList.add(staff);
-           scanner.nextLine();
-           
-           
-       }
-    
-       scanner.close();       //close file
-       
-       return staffList;
+        } catch (Exception e) {
+            System.out.println("Error ! Could not find the file.");
+        }
+
+        scanner.useDelimiter("[|]");
+
+        while (scanner.hasNext()) {      //do while loop - read file content
+            String staffID = scanner.next();
+            String password = scanner.next();
+            String staffIC = scanner.next();
+            String staffName = scanner.next();
+            char gender = scanner.next().charAt(0);
+            String personalEmail = scanner.next();
+            String phone = scanner.next();
+
+            Staff staff = new Staff(staffID, password, staffIC, staffName, gender, personalEmail, phone);
+            staffList.add(staff);
+            scanner.nextLine();
+        }
+
+        scanner.close();       //close file
+
+        return staffList;
 
     }
+    public Staff onSession;
 
     public Staff addStaff() {
         // Create object
         Staff newStaff = new Staff();
         Scanner scan = new Scanner(System.in);
-        ArrayList<Staff> staffList=readRStaffFile();
-        
+        ArrayList<Staff> staffList = readRStaffFile();
+
         //default auto staff ID/username sequence
-        String staffID=staffList.get(staffList.size()-1).getStaffID();
-       
+        String staffID = staffList.get(staffList.size() - 1).getStaffID();
+        System.out.println(staffID + "\n"+ staffList.size() );
         // ID auto checking and define
         boolean validID = false;
         do {
-            int numberInFile = Integer.parseInt(staffID.substring(1,6));
+            int numberInFile = Integer.parseInt(staffID.substring(1, 6));
 
             if (numberInFile > 0 && numberInFile < 10) {
-                staffID = "S0000" + (numberInFile+1);
+                staffID = "S0000" + (numberInFile + 1);
                 newStaff.setStaffID(staffID);
             } else if (numberInFile >= 10 && numberInFile < 99) {
                 newStaff.setStaffID(staffID);
-                staffID = "S000" + (numberInFile+1);
+                staffID = "S000" + (numberInFile + 1);
             } else if (numberInFile >= 100 && numberInFile < 999) {
                 newStaff.setStaffID(staffID);
-                staffID = "S00" + (numberInFile+1);
+                staffID = "S00" + (numberInFile + 1);
             } else if (numberInFile >= 1000 && numberInFile < 9999) {
                 newStaff.setStaffID(staffID);
-                staffID = "S0" + (numberInFile+1);
+                staffID = "S0" + (numberInFile + 1);
             } else if (numberInFile >= 10000 && numberInFile < 99999) {
                 newStaff.setStaffID(staffID);
-                staffID = "S" + (numberInFile+1);
+                staffID = "S" + (numberInFile + 1);
             } else {
                 System.out.println("Invalid StaffID, Check SYSTEM");
                 break;
             }
         } while (validID = false);
-       System.out.println("Current Staff ID: "+newStaff.getStaffID()+"\n\n");
-        
-        
+        System.out.println("Current Staff ID: " + newStaff.getStaffID() + "\n\n");
+
         //input and validation for password
         boolean validPassword = false;
         do {
 
-            System.out.println("Password must have at least one numerical character, one lowercase character and one uppercase character.");
-            System.out.println("Password must also have at least one special symbol such as @,#,$,%,!,*,& and password length should be between 8 and 16.");
-            System.out.println("\n\nEnter password >");
-            String password = scan.next();
+            System.out.println("Enter STAFF IC (011111101193) >");
+                String IC = scan.next();
 
-            int upperCase = 0;
-            int lowerCase = 0;
-            int number = 0;
-            int specialCase = 0;
-
-            for (int index = 0; index < password.length(); index++) {
-                if (Character.isUpperCase(password.charAt(index))) {
-                    upperCase++;
-                } else if (Character.isLowerCase(password.charAt(index))) {
-                    lowerCase++;
-                } else if (Character.isDigit(password.charAt(index))) {
-                    number++;
-                } else {
-                    specialCase++;
-                }
-            }
-
-            if (upperCase != 0 && lowerCase != 0 && number != 0 && specialCase != 0) {
-                validPassword = true;
-                newStaff.setPassword(password);
+            if (IC.length() != 12) {
+                System.out.println("Invalid IC Format, Pls try again");
+                validPassword = false;
             } else {
-                System.out.println("Invalid Password format, Pls Try Again");
+                newStaff.setStaffIC(IC);
+                newStaff.setPassword(IC);
+                validPassword = true;
             }
 
         } while (validPassword == false);
 
         //input for staff name
         System.out.println("\n\nEnter Staff Name >");
-        String name = getUserInputStaffInformation();
+        String name = scan.next();
         newStaff.setStaffName(name);
 
         //input and validation for staff gender
@@ -196,20 +178,19 @@ public class AdminOperation {
             Pattern patternPhoneNumber2 = Pattern.compile("\\d{3}-\\d{8}");
             Matcher matcherPhoneNumber1 = patternPhoneNumber1.matcher(phone);
             Matcher matcherPhoneNumber2 = patternPhoneNumber2.matcher(phone);
-            if (matcherPhoneNumber1.matches()==true || matcherPhoneNumber2.matches()==true) {
+            if (matcherPhoneNumber1.matches() == true || matcherPhoneNumber2.matches() == true) {
                 validPhone = true;
                 newStaff.setPhoneNumber(phone);
-            }
-            else{
+            } else {
                 System.out.println("Invalid Phone Format, Please Try Again");
             }
         } while (validPhone == false);
 
         System.out.println("Below is the information");
         System.out.println("=======================================================================");
-        System.out.printf("|    StaffID     |       %-33s            |\n", newStaff.getStaffID());
+        System.out.printf("|    Staff ID    |       %-33s            |\n", newStaff.getStaffID());
         System.out.println("=======================================================================");
-        System.out.printf("|    Password    |       %-33s            |\n", newStaff.getPassword());
+        System.out.printf("|    Staff IC    |       %-33s            |\n", newStaff.getStaffIC());
         System.out.println("=======================================================================");
         System.out.printf("|    Name        |       %-33s            |\n", newStaff.getStaffName());
         System.out.println("=======================================================================");
@@ -230,7 +211,9 @@ public class AdminOperation {
             if (confirm == 'Y' || confirm == 'y') {
                 addStaffToFile(newStaff);
                 saveConfirmation = true;
+                System.out.println("PASSWORD === IC NUMBER");
                 System.out.println("Staff Save Successful");
+
             } else if (confirm == 'n' || confirm != 'N') {
                 saveConfirmation = true;
             } else {
@@ -252,17 +235,14 @@ public class AdminOperation {
             e.printStackTrace();
         }
     }
-    
-    private static String getUserInputStaffInformation() {
-        String outputString;
-        Scanner user = new Scanner(System.in);
-        outputString = user.nextLine();
-        return outputString;
+
+    public Staff getSession(Staff staff) {
+        return staff;
     }
-    
-//    public static void main(String args[]){
-//        AdminOperation adminOperat = new AdminOperation();
-//        adminOperat.addStaff();
-//       // adminOperat.createStaffFile();
-//    }
+
+    public static void main(String args[]) {
+        AdminOperation adminOperat = new AdminOperation();
+        adminOperat.addStaff();
+        // adminOperat.createStaffFile();
+    }
 }

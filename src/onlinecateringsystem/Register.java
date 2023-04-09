@@ -36,6 +36,30 @@ public class Register {
         this.password = password;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setIcNumber(String icNumber) {
+        this.icNumber = icNumber;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getName() {
         return name;
     }
@@ -60,6 +84,7 @@ public class Register {
         return password;
     }
    
+    
     
     private Scanner y;
     public int readRegisterFile(Register[] registerArr){
@@ -122,6 +147,27 @@ public class Register {
     }
     
     
+    public static boolean checkRegisterName(String name, Register[] registerArr, int numOfRecords){
+        boolean condition = true;
+       
+        
+        for(int e = 0; e < numOfRecords; e++)
+        {
+            if(name.compareTo(registerArr[e].getName()) == 0) {          
+               condition = true;
+               break;
+               
+            }
+                
+            else 
+               condition = false;
+                  
+        }
+        
+        return condition;
+        
+    }
+    
     public static boolean isValidateName(String name) {
         boolean condition = true;
         
@@ -141,6 +187,26 @@ public class Register {
         return condition;
     }
     
+    public static boolean checkRegisterPhoneNumber(String phoneNumber, Register[] registerArr, int numOfRecords){
+        boolean condition = true;
+        
+        for(int e = 0; e < numOfRecords; e++)
+        {
+           if(phoneNumber.compareTo(registerArr[e].getPhoneNumber()) == 0)
+           {           
+              condition = true;
+              break;
+           
+           }
+           else {
+               condition = false;
+               
+           }     
+        }
+        
+        return condition;
+        
+    }
     
     public static boolean isValidatePhoneNumber(String phoneNumber) {
         boolean condition = true;
@@ -162,6 +228,26 @@ public class Register {
         return condition;
     }
     
+    public static boolean checkRegisterICNo(String icNumber, Register[] registerArr, int numOfRecords){
+        boolean condition = true;
+        
+        for(int e = 0; e < numOfRecords; e++)
+        {
+           if(icNumber.compareTo(registerArr[e].getIcNumber()) == 0)
+           {           
+              condition = true;
+              break;
+           
+           }
+           else {
+               condition = false;
+               
+           }     
+        }
+        
+        return condition;
+        
+    }
     
     public static boolean isValidateICNo(String icNumber) {
         boolean condition = true;
@@ -206,7 +292,7 @@ public class Register {
     public static boolean isValidateEmailAddress(String emailAddress) {
         boolean condition = true;
         
-        Pattern patternUsername = Pattern.compile("^[a-z0-9]+@[a-z]+\\.com$");
+        Pattern patternUsername = Pattern.compile("^[a-z0-9]+@[a-z]+\\.[a-z]{2,3}$");
         Matcher matcherUsername = patternUsername.matcher(emailAddress);
 
         
@@ -262,12 +348,33 @@ public class Register {
         return condition;
     }
     
+    public static boolean checkRegisterPassword(String password, Register[] registerArr, int numOfRecords){
+        boolean condition = true;
+        
+        for(int e = 0; e < numOfRecords; e++)
+        {
+           if(password.compareTo(registerArr[e].getPassword()) == 0)
+           {           
+              condition = true;
+              break;
+           
+           }
+           else {
+               condition = false;
+               
+           }     
+        }
+        
+        return condition;
+        
+    }
+    
         
     public static boolean isValidatePassword(String password) {
         boolean condition = false;
 
         if(password.length() < 8 || password.length() > 16) {
-            System.out.println("Password length should be between 8 and 16.");
+            System.out.println("Password length should between 8 and 16.");
             condition = true;
         }
 
@@ -346,6 +453,12 @@ public class Register {
  
         
     }
+
+    @Override
+    public String toString() {
+        return name + "|" + phoneNumber + "|" + icNumber + "|" + emailAddress + "|" + username + "|" + password + "|\n";
+    }
+    
     
          
 }
