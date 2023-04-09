@@ -8,6 +8,8 @@ package onlinecateringsystem;
 import entity.Order;
 import java.awt.AWTException;
 import java.awt.Robot;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Year;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -29,7 +31,7 @@ public class Payment {
             System.out.printf("%-50s RM%-8.2f\n", currentOrder.getOrderItemList().getEntry(i).getItemName(), currentOrder.getOrderItemList().getEntry(i).getSubtotal());
         }
         System.out.println("*****************************************************************");
-        System.out.println("Total: RM" + currentOrder.getTotalPrice());
+        System.out.printf("Total: RM%-8.2f\n", currentOrder.getTotalPrice());
     }
 
     public boolean makePayment(Order currentOrder) {
@@ -162,6 +164,51 @@ public class Payment {
         while (action.equals("1") == false || action.equals("2") == false || action.equals("3") == false && cardTypeFlag == false && cardNumberFlag == false && expirationFlag == false && securityCodeFlag == false);
         //Supposition no need this, wont reach here
         return false;
+    }
+
+    public void printReceiptMenu(String userName, Order currentOrder) throws InterruptedException {
+        String choice = "";
+        do {
+            clsScreen();
+            System.out.println("Do you want to print receipt?(Y/N)");
+            System.out.print(">");
+            choice = scan.next();
+            if (choice.equals("Y") == false && choice.equals("N") == false) {
+                System.out.println(ConsoleColors.RED + "Please only enter 'Y' or 'N' to indicate your selection!" + ConsoleColors.RESET);
+            }
+        } while (choice.equals("Y") == false && choice.equals("N") == false);
+        if (choice.equals("Y") == true) {
+            printReceipt(userName, currentOrder);
+        }
+        clsScreen();
+    }
+
+    public String formatReceipt(String userName, Order currentOrder) {
+        String receipt = "Order ID:";
+        receipt += currentOrder.getOrderID();
+        receipt += "\n*****************************************************************\n";
+        for (int i = 1; i < currentOrder.getOrderItemList().getNumberOfEntries() + 1; i++) {
+            String tempChunk = String.format("%-50s RM%-8.2f\n", currentOrder.getOrderItemList().getEntry(i).getItemName(), currentOrder.getOrderItemList().getEntry(i).getSubtotal());
+            receipt += tempChunk;
+        }
+        receipt += "\n*****************************************************************\n";
+        receipt += String.format("Total: RM%-8.2f\n", currentOrder.getTotalPrice());
+        receipt += "Payment made by:" + userName + "\n";
+        receipt += "Payment made at:" + java.time.LocalDateTime.now() + "\n";
+        return receipt;
+    }
+
+    public void printReceipt(String userName, Order currentOrder) throws InterruptedException {
+        try {
+            clsScreen();
+            FileWriter writer = new FileWriter("Receipt.txt");
+            writer.write(formatReceipt(userName, currentOrder));
+            writer.close();
+            clsScreen();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     public static void clsScreen() {

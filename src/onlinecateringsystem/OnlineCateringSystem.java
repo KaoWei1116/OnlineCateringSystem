@@ -158,7 +158,9 @@ public class OnlineCateringSystem {
                             ordering.orderList.add(new Order(newOrder));
                             ordering.writeOrderIntoFile();
                             ordering.writeOrderTrackingIntoFile();
+                            payment.printReceiptMenu(finalUsername, newOrder);
                             ordering.viewOrderStatus(newOrder);
+
                         }
                     }
                     break;
