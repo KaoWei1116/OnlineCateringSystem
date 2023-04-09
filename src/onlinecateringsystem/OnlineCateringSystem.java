@@ -129,7 +129,8 @@ public class OnlineCateringSystem {
             System.out.println("=====================================");
             System.out.println("|   1. View Profile                 |");
             System.out.println("|   2. View Menu                    |");
-            System.out.println("|   3. Logout                       |");
+            System.out.println("|   3. Edit Profile                 |");
+            System.out.println("|   4. Logout                       |");
             System.out.println("=====================================");
             System.out.print("\n");
             System.out.print("Enter an number : ");
@@ -162,10 +163,17 @@ public class OnlineCateringSystem {
                     }
                     break;
                 case 3:
+                    viewUserProfile.viewUserProfile(finalUsername);
+                    EditProfile editProcess = new EditProfile();
+                    editProcess.setUsername(finalUsername);
+                    editProcess.editMenu();
+                    break;
+
+                case 4:
                     finalUsername = startingInterfaceMenu();
                     break;
                 default:
-                    System.out.println("Please insert an integer between 1 to 3. Thank you.");
+                    System.out.println("Please insert an integer between 1 to 4. Thank you.");
                     break;
 
             }
@@ -218,8 +226,9 @@ public class OnlineCateringSystem {
             System.out.println("|   2. View All Inventory           |");
             System.out.println("|   3. Delete An Inventory          |");
             System.out.println("|   4. Update Inventory             |");
-            System.out.println("|   5. Update Order Status          |");
-            System.out.println("|   6. Logout                       |");
+            System.out.println("|   5. Reset Password               |");
+            System.out.println("|   6. Update Order Status          |");
+            System.out.println("|   7. Logout                       |");
             System.out.println("=====================================");
             System.out.print("\n");
             System.out.print("Enter an number : ");
@@ -254,8 +263,49 @@ public class OnlineCateringSystem {
                     System.out.println("=====================================");
                     Inventory[] updateInventoryArr = new Inventory[30];
                     InventoryUI.updateInventory(updateInventoryArr);
-                    break;
                 case 5:
+                    ChangePassword process = new ChangePassword();
+                    Scanner inputScan = new Scanner(System.in);
+                    process.getSession(finalUsername);
+                    process.staffList = process.readStaffList();
+                    System.out.println("\n\n\n============================================");
+                    System.out.println("             PASSWORD CHANGE PROCESS");
+                    System.out.println("\nEnter Old Password >");
+                    String password = inputScan.next();
+
+                    if (password.equals(process.getSession(finalUsername).getPassword())) {
+                        System.out.println("\nEnter New Password > ");
+                        String newPassword = inputScan.next();
+
+                        System.out.println("\nConfirm Password");
+                        String confirmPassword = inputScan.next();
+
+                        if (newPassword.equals(confirmPassword) == true) {
+                            System.out.println("Confirm to change password[Y=Yes/N=No] >");
+                            char confirm = inputScan.next().charAt(0);
+
+                            if (confirm == 'y' || confirm == 'Y') {
+                                for (int index = 0; index < process.staffList.size(); index++) {
+                                    if (process.getSession(finalUsername).getStaffID().equals(process.staffList.get(index).getStaffID()) == true) {
+                                        process.staffList.get(index).setPassword(newPassword);
+                                        process.rewriteFile(process.staffList);
+                                        System.out.println("Passwords Successfuk Changed");
+                                    }
+
+                                }
+                            } else {
+
+                                return;
+                            }
+                        } else {
+                            System.out.println("The New Password not consist with Confirm Password");
+                        }
+                    } else {
+                        System.out.println("Password Wrong, Pls Try again");
+                    }
+
+                    break;
+                case 6:
                     System.out.print("\n");
                     System.out.println("=====================================");
                     System.out.println("|     Update Order Status Page      |");
@@ -263,7 +313,7 @@ public class OnlineCateringSystem {
                     Ordering ordering = new Ordering();
                     ordering.updateOrderStatus();
                     break;
-                case 6:
+                case 7:
                     finalUsername = startingInterfaceMenu();
                     break;
                 default:

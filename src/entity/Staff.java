@@ -14,6 +14,7 @@ import java.util.Objects;
 public class Staff {
      private String staffID;
      private String password;
+     private String staffIC;
      private String staffName;
      private String personalEmail;
      private String phoneNumber;
@@ -22,9 +23,10 @@ public class Staff {
     public Staff() {
     }
 
-    public Staff(String staffID, String password, String staffName, char gender, String personalEmail, String phoneNumber) {
+    public Staff(String staffID, String password,String staffIC ,String staffName, char gender, String personalEmail, String phoneNumber) {
         this.staffID = staffID;
         this.password = password;
+        this.staffIC = staffIC;
         this.staffName = staffName;
         this.personalEmail = personalEmail;
         this.phoneNumber = phoneNumber;
@@ -49,6 +51,15 @@ public class Staff {
         this.password = password;
     }
 
+    public String getStaffIC() {
+        return staffIC;
+    }
+
+    public void setStaffIC(String staffIC) {
+        this.staffIC = staffIC;
+    }
+    
+    
     public String getStaffName() {
         return staffName;
     }
@@ -87,6 +98,7 @@ public class Staff {
         int hash = 7;
         hash = 59 * hash + Objects.hashCode(this.staffID);
         hash = 59 * hash + Objects.hashCode(this.password);
+        hash = 59 * hash + Objects.hashCode(this.staffIC);
         hash = 59 * hash + Objects.hashCode(this.staffName);
         hash = 59 * hash + Objects.hashCode(this.personalEmail);
         hash = 59 * hash + Objects.hashCode(this.phoneNumber);
@@ -111,7 +123,7 @@ public class Staff {
 
     @Override
     public String toString() {
-        return  staffID+"|"+password +"|"+staffName+"|"+gender+"|"+personalEmail+"|"+phoneNumber+"|\n";
+        return  staffID +"|"+password +"|"+staffIC+"|"+staffName+"|"+gender+"|"+personalEmail+"|"+phoneNumber+"|\n";
     }
 
    
