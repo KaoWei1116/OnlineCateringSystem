@@ -111,8 +111,10 @@ public class OnlineCateringSystem {
     private static void customerMenu() throws IOException, FileNotFoundException, InterruptedException {
         Ordering ordering = new Ordering();
         ordering.readMenuItem();
-        ordering.createOrderFile();
+        // ordering.createOrderFile();
+        ordering.createOrderTrackingFile();
         ordering.readOrderFromFile();
+        ordering.readOrderTrackingFromFile();
 
         int choice = 0;
         String word = "";
@@ -148,11 +150,15 @@ public class OnlineCateringSystem {
                     startOrder = scanner.next().charAt(0);
                     if (startOrder == 'Y' || startOrder == 'y') {
                         Order newOrder = new Order(ordering.makeOrder());
+                        newOrder.setOrderStatus("Pending");
                         Payment payment = new Payment();
                         boolean paymentStatus = payment.makePayment(newOrder);
                         if (paymentStatus == true) {
+                            newOrder.setOrderStatus("Processing");
                             ordering.orderList.add(new Order(newOrder));
                             ordering.writeOrderIntoFile();
+                            ordering.writeOrderTrackingIntoFile();
+                            ordering.viewOrderStatus(newOrder);
                         }
                     }
                     break;
@@ -221,7 +227,8 @@ public class OnlineCateringSystem {
             System.out.println("|   3. Delete An Inventory          |");
             System.out.println("|   4. Update Inventory             |");
             System.out.println("|   5. Reset Password               |");
-            System.out.println("|   6. Logout                       |");
+            System.out.println("|   6. Update Order Status          |");
+            System.out.println("|   7. Logout                       |");
             System.out.println("=====================================");
             System.out.print("\n");
             System.out.print("Enter an number : ");
@@ -252,12 +259,11 @@ public class OnlineCateringSystem {
                 case 4:
                     System.out.print("\n");
                     System.out.println("=====================================");
-                    System.out.println("|    Update Inventory Details Page   |");
+                    System.out.println("|   Update Inventory Details Page   |");
                     System.out.println("=====================================");
                     Inventory[] updateInventoryArr = new Inventory[30];
                     InventoryUI.updateInventory(updateInventoryArr);
                 case 5:
-
                     ChangePassword process = new ChangePassword();
                     Scanner inputScan = new Scanner(System.in);
                     process.getSession(finalUsername);
@@ -300,11 +306,18 @@ public class OnlineCateringSystem {
 
                     break;
                 case 6:
+                    System.out.print("\n");
+                    System.out.println("=====================================");
+                    System.out.println("|     Update Order Status Page      |");
+                    System.out.println("=====================================");
+                    Ordering ordering = new Ordering();
+                    ordering.updateOrderStatus();
+                    break;
+                case 7:
                     finalUsername = startingInterfaceMenu();
                     break;
                 default:
                     System.out.println("Please insert an integer between 1 to 5. Thank you.");
-                    break;
             }
 
         } while (choice < 1 || choice > 5);
