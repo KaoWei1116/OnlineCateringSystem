@@ -317,7 +317,7 @@ public class OnlineCateringSystem {
                     finalUsername = startingInterfaceMenu();
                     break;
                 default:
-                    System.out.println("Please insert an integer between 1 to 5. Thank you.");
+                    System.out.println("Please insert an integer between 1 to 7. Thank you.");
             }
 
         } while (choice < 1 || choice > 5);
