@@ -24,3 +24,20 @@ ORD1010
 #ITM0002, Strawberry Shortcake, 1, 15.0
 ORD1011
 #ITM0003, Brownies, 2, 30.0
+ORD1012
+#ITM0001, Apple Pie, 1, 10.0
+#ITM0002, Strawberry Shortcake, 2, 30.0
+ORD1013
+#ITM0001, Apple Pie, 1, 10.0
+#ITM0003, Brownies, 3, 45.0
+ORD1014
+#ITM0001, Apple Pie, 1, 10.0
+ORD1015
+#ITM0001, Apple Pie, 1, 10.0
+ORD1016
+#ITM0001, Apple Pie, 1, 10.0
+ORD1017
+#ITM0001, Apple Pie, 1, 10.0
+ORD1018
+#ITM0003, Brownies, 3, 45.0
+#ITM0002, Strawberry Shortcake, 4, 60.0

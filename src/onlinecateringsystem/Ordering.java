@@ -398,10 +398,9 @@ public class Ordering {
         System.out.println("===========================");
     }
 
-    public void viewOrderStatus(Order currentOrder) {
+    public void viewOrderStatus(Order currentOrder) throws InterruptedException {
         long startTime = System.currentTimeMillis();
-        
-        clsScreen();
+
         do {
             if ((System.currentTimeMillis() - startTime) % 10000 == 0) {
                 readOrderTrackingFromFile();
