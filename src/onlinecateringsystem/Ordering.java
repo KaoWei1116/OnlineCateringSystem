@@ -158,6 +158,63 @@ public class Ordering {
         }
     }
 
+    public void createOrderTrackingFile() {
+        try {
+            File file = new File("OrderTracking.txt");
+            if (file.createNewFile()) {
+                System.out.println("File Created");
+            } else {
+
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    protected void writeOrderTrackingIntoFile() throws InterruptedException {
+        try {
+            clsScreen();
+            FileWriter writer = new FileWriter("OrderTracking.txt");
+            writer.write(formatWriteOrderTracking());
+            writer.close();
+            clsScreen();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    private String formatWriteOrderTracking() {
+        String orderString = "";
+        for (int index = 1; index <= orderList.getNumberOfEntries(); index++) {
+            orderString += orderList.getEntry(index).getOrderID() + ", ";
+            orderString += orderList.getEntry(index).getOrderStatus() + "\n";
+        }
+        return orderString;
+    }
+
+    public void readOrderTrackingFromFile() {
+        try {
+            File obj = new File("OrderTracking.txt");
+            Scanner reader = new Scanner(obj);
+            while (reader.hasNextLine()) {
+                String data = reader.nextLine();
+                String[] stringList = data.split(", ");
+                for (int index = 1; index <= orderList.getNumberOfEntries(); index++) {
+                    if (orderList.getEntry(index).getOrderID().equals(stringList[0])) {
+                        orderList.getEntry(index).setOrderStatus(stringList[1]);
+                    }
+                }
+            }
+            reader.close();
+            //System.out.println("Get data successful");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
     public Order makeOrder() {
 
         Scanner scanner = new Scanner(System.in);
@@ -241,6 +298,136 @@ public class Ordering {
             }
         }
         return tempItem;
+    }
+
+    public void updateOrderStatus() throws InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+        String currentOrderID = "";
+        char modifyOrderStatus;
+        int errorCount = 0;
+
+        readOrderFromFile();
+        readOrderTrackingFromFile();
+
+        clsScreen();
+
+        do {
+            currentOrderID = "";
+            modifyOrderStatus = ' ';
+            errorCount = 0;
+            displayOrderTracking();
+
+            System.out.printf("Enter the Order ID you want to update(-1 to stop): ");
+            currentOrderID = scanner.nextLine();
+
+            if (!currentOrderID.equals("-1")) {
+                for (int index = 1; index <= orderList.getNumberOfEntries(); index++) {
+                    if (orderList.getEntry(index).getOrderID().equals(currentOrderID)) {
+                        if (orderList.getEntry(index).getOrderStatus().equals("Completed")) {
+                            clsScreen();
+                            System.out.println("This order is completed!");
+                        } else if (orderList.getEntry(index).getOrderStatus().equals("Canceled")) {
+                            clsScreen();
+                            System.out.println("This order is canceled!");
+                        } else if (orderList.getEntry(index).getOrderStatus().equals("Processing")) {
+                            System.out.println("Do you want to change the order status?");
+                            System.out.println("Processing --> Preparing");
+                            System.out.printf("Y for yes > ");
+                            modifyOrderStatus = scanner.next().charAt(0);
+                            scanner.nextLine();
+                            if (modifyOrderStatus == 'Y' || modifyOrderStatus == 'y') {
+                                orderList.getEntry(index).setOrderStatus("Preparing");
+                                writeOrderTrackingIntoFile();
+                                clsScreen();
+                                System.out.println("Order status updated.");
+                            } else {
+                                clsScreen();
+                                System.out.println("The order status remain " + orderList.getEntry(index).getOrderStatus() + ".");
+                            }
+                        } else if (orderList.getEntry(index).getOrderStatus().equals("Preparing")) {
+                            System.out.println("Do you want to change the order status?");
+                            System.out.println("Preparing --> Ready");
+                            System.out.printf("Y for yes > ");
+                            modifyOrderStatus = scanner.next().charAt(0);
+                            scanner.nextLine();
+                            if (modifyOrderStatus == 'Y' || modifyOrderStatus == 'y') {
+                                orderList.getEntry(index).setOrderStatus("Ready");
+                                writeOrderTrackingIntoFile();
+                                clsScreen();
+                                System.out.println("Order status updated.");
+                            } else {
+                                clsScreen();
+                                System.out.println("The order status remain " + orderList.getEntry(index).getOrderStatus() + ".");
+                            }
+                        } else if (orderList.getEntry(index).getOrderStatus().equals("Ready")) {
+                            System.out.println("Do you want to change the order status?");
+                            System.out.println("Ready --> Completed");
+                            System.out.printf("Y for yes > ");
+                            modifyOrderStatus = scanner.next().charAt(0);
+                            scanner.nextLine();
+                            if (modifyOrderStatus == 'Y' || modifyOrderStatus == 'y') {
+                                orderList.getEntry(index).setOrderStatus("Completed");
+                                writeOrderTrackingIntoFile();
+                                clsScreen();
+                                System.out.println("Order status updated.");
+                            } else {
+                                clsScreen();
+                                System.out.println("The order status remain " + orderList.getEntry(index).getOrderStatus() + ".");
+                            }
+                        } else {
+                            errorCount++;
+                        }
+                    }
+                }
+                if (errorCount == orderList.getNumberOfEntries()) {
+                    clsScreen();
+                    System.out.println("Please enter valid Order ID!");
+                }
+            }
+        } while (!currentOrderID.equals("-1"));
+        System.out.println("Exit order status page..");
+        clsScreen();
+    }
+
+    private void displayOrderTracking() {
+        System.out.printf("\n%-10s %-15s\n", "Order ID", "Order Status");
+        System.out.println("===========================");
+        for (int index = 1; index <= orderList.getNumberOfEntries(); index++) {
+            System.out.printf("%-10s %-15s\n", orderList.getEntry(index).getOrderID(), orderList.getEntry(index).getOrderStatus());
+        }
+        System.out.println("===========================");
+    }
+
+    public void viewOrderStatus(Order currentOrder) {
+        long startTime = System.currentTimeMillis();
+        
+        clsScreen();
+        do {
+            if ((System.currentTimeMillis() - startTime) % 10000 == 0) {
+                readOrderTrackingFromFile();
+                for (int index = 1; index <= orderList.getNumberOfEntries(); index++) {
+                    if (orderList.getEntry(index).equals(currentOrder)) {
+                        switch (orderList.getEntry(index).getOrderStatus()) {
+                            case "Processing":
+                                System.out.println("\nYour order is processing...");
+                                currentOrder.setOrderStatus("Processing");
+                                break;
+                            case "Preparing":
+                                System.out.println("\nYour order is preparing...");
+                                currentOrder.setOrderStatus("Preparing");
+                                break;
+                            case "Ready":
+                                System.out.println("\nYour order is ready for pick up.");
+                                currentOrder.setOrderStatus("Ready");
+                                break;
+                            case "Completed":
+                                System.out.println("\nYou have pick up your order. Enjoy your meal~");
+                                currentOrder.setOrderStatus("Completed");
+                        }
+                    }
+                }
+            }
+        } while (!currentOrder.getOrderStatus().equals("Completed"));
     }
 
     public static void clsScreen() {
