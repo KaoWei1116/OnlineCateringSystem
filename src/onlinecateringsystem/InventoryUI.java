@@ -184,7 +184,7 @@ public class InventoryUI {
 
         }
 
-        Inventory inventoryItem = new Inventory(itemNameInput, itemCategoryInput, itemMinimumQuantityInput, itemQuantityOnHandInput, itemUnitPriceInput, null, supplierNameInput, supplierEmailAddressInput);
+        Inventory inventoryItem = new Inventory(itemNameInput, itemCategoryInput, itemMinimumQuantityInput, itemQuantityOnHandInput, itemUnitPriceInput, null, supplierNameInput, supplierEmailAddressInput, null);
 
         if (Character.toUpperCase(confirmAddInventory) == 'Y') {
             Inventory.appendInventoryFile(inventoryItem);
@@ -207,13 +207,13 @@ public class InventoryUI {
 
         System.out.printf("\n");
         System.out.printf("Full Details Of Inventory : \n");
-        System.out.println("+-----------------+---------------------------+-----------------+------------------+--------------------+--------------+-----------------+---------------------------+-----------------------------+");
-        System.out.printf("| %-15s | %-25s | %-15s | %-15s | %-18s | %-12s | %-15s | %-25s | %-27s |\n", "Inventory ID", "Name", "Type", "Minimum Quantity", "Quantity On Hand", "Unit Price", "Added Date", "Supplier Name", "Supplier Email Address");
-        System.out.println("+-----------------+---------------------------+-----------------+------------------+--------------------+--------------+-----------------+---------------------------+-----------------------------+");
+        System.out.println("+-----------------+---------------------------+-----------------+------------------+--------------------+--------------+-----------------+---------------------------+-----------------------------+-----------------+");
+        System.out.printf("| %-15s | %-25s | %-15s | %-15s | %-18s | %-12s | %-15s | %-25s | %-27s | %-15s|\n", "Inventory ID", "Name", "Type", "Minimum Quantity", "Quantity On Hand", "Unit Price", "Added Date", "Supplier Name", "Supplier Email Address", "Inventory Status");
+        System.out.println("+-----------------+---------------------------+-----------------+------------------+--------------------+--------------+-----------------+---------------------------+-----------------------------+-----------------+");
 
         for (int i = 0; i < numRecordInventory; i++) {
-            System.out.printf("| %-15s | %-25s | %-15s | %-15s  | %-18s | RM%-10s | %-15s | %-25s | %-27s |\n", inventoryDetailsArr[i].getInventoryID(), inventoryDetailsArr[i].getItemName(), inventoryDetailsArr[i].getItemCategory(), inventoryDetailsArr[i].getItemMinimumQuantity(), inventoryDetailsArr[i].getItemQuantityOnHand(), inventoryDetailsArr[i].getItemUnitPrice(), inventoryDetailsArr[i].getItemAddedDate(), inventoryDetailsArr[i].getSupplierName(), inventoryDetailsArr[i].getSupplierEmailAddress());
-            System.out.println("+-----------------+---------------------------+-----------------+------------------+--------------------+--------------+-----------------+---------------------------+-----------------------------+");
+            System.out.printf("| %-15s | %-25s | %-15s | %-15s  | %-18s | RM%-10s | %-15s | %-25s | %-27s | %-15s |\n", inventoryDetailsArr[i].getInventoryID(), inventoryDetailsArr[i].getItemName(), inventoryDetailsArr[i].getItemCategory(), inventoryDetailsArr[i].getItemMinimumQuantity(), inventoryDetailsArr[i].getItemQuantityOnHand(), inventoryDetailsArr[i].getItemUnitPrice(), inventoryDetailsArr[i].getItemAddedDate(), inventoryDetailsArr[i].getSupplierName(), inventoryDetailsArr[i].getSupplierEmailAddress(), inventoryDetailsArr[i].getInventoryStatus());
+            System.out.println("+-----------------+---------------------------+-----------------+------------------+--------------------+--------------+-----------------+---------------------------+-----------------------------+-----------------+");
         }
 
         System.out.println("Press enter to return");
@@ -237,6 +237,7 @@ public class InventoryUI {
         for (int i = 0; i < numRecordInventory; i++) {
             if (inventoryIDInput.compareTo(inventoryDetailsArr[i].getInventoryID()) == 0) {
                 System.out.printf("%-10s : %-25s\n", "Inventory Name", inventoryDetailsArr[i].getItemName());
+                System.out.printf("%-10s : %-25s\n", "Inventory Status", inventoryDetailsArr[i].getInventoryStatus());
                 System.out.printf("%-40s", "Confirm To Delete Inventory ? [y or n]");
                 confirmDeleteInventory = getUserInputInventory().charAt(0);
 
@@ -511,7 +512,7 @@ public class InventoryUI {
 
                 if (Character.toUpperCase(confirmChangeQuantityOnHandAmount) == 'Y') {
                     Inventory.editInventoryQuantityOnHandFile(inventoryIDInput, latestQuantityOnHand, inventoryArr, numRecordsTextFile);
-
+                   
                 } else {
                     System.out.println("Cancelled Successfully");
 
@@ -620,6 +621,18 @@ public class InventoryUI {
 
             if (Character.toUpperCase(updateOtherInformation) == 'N') {
                 System.out.printf("\n");
+               
+            
+                //check whether the item quantity on hand is out of stock or not
+                for(int i = 0; i < numRecordsTextFile; i++)
+                {
+                    if(Integer.parseInt(inventoryArr[i].getItemQuantityOnHand()) == 0)
+                    {
+                         inventoryArr[i].setInventoryStatus("Out Of Stock");
+                    }
+                }    
+                
+                
                 Inventory.updatedVersion(inventoryArr, numRecordsTextFile);
                 System.out.println("Updated Successfully");
             }
