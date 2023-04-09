@@ -35,13 +35,15 @@ public class Inventory {
     private String itemAddedDate;
     private String supplierName;
     private String supplierEmailAddress;
+    private String inventoryStatus;
+            
     
     public Inventory() 
     {
         
     }
     
-    public Inventory(String inventoryID, String itemName, String itemCategory, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress) {
+    public Inventory(String inventoryID, String itemName, String itemCategory, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress, String inventoryStatus) {
         this.inventoryID = inventoryID;
         Inventory.inventoryNumber++;
         inventoryID = inventoryID + inventoryNumber;
@@ -53,9 +55,10 @@ public class Inventory {
         this.itemAddedDate = itemAddedDate;
         this.supplierName = supplierName;
         this.supplierEmailAddress = supplierEmailAddress;
+        this.inventoryStatus = inventoryStatus;
     }
     
-    public Inventory(String itemName, String itemCategory, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress) {
+    public Inventory(String itemName, String itemCategory, String itemMinimumQuantity, String itemQuantityOnHand, String itemUnitPrice, String itemAddedDate, String supplierName, String supplierEmailAddress, String inventoryStatus) {
         char firstDigit = latestInventoryID.charAt(2);
         int firstDigitValue = Character.getNumericValue(firstDigit);
         char secondDigit = latestInventoryID.charAt(3);
@@ -72,6 +75,7 @@ public class Inventory {
         this.itemAddedDate = itemAddedDate;
         this.supplierName = supplierName;
         this.supplierEmailAddress = supplierEmailAddress;
+        this.inventoryStatus = inventoryStatus;
     }
 
     public String getInventoryID() {
@@ -115,15 +119,28 @@ public class Inventory {
         return supplierEmailAddress;
     }
     
+    public String getInventoryStatus() {
+        return inventoryStatus;
+    }
+    
+    public void setInventoryStatus(String inventoryStatus) {
+        this.inventoryStatus = inventoryStatus;
+    }
+    
     private Scanner y;
     public int readInventoryFile(Inventory[] inventoryArr){    
     
     inventoryNumber = 1;    
         
     try{                 //open file
-          y = new Scanner(new File("InventoryDetails.txt"));
-         
-              
+        File a = new File("InventoryDetails.txt");
+        if(a.createNewFile()) {
+            System.out.println("File created: " + a.getName());
+            
+        }
+
+        y = new Scanner(new File("InventoryDetails.txt"));
+        
     }
     catch(Exception e){
           System.out.println("Error ! Could not find the file.");
@@ -143,9 +160,10 @@ public class Inventory {
            String itemAddedDate = y.next();
            String supplierName = y.next();
            String supplierEmailAddress = y.next();
+           String inventoryStatus = y.next();
            
 
-           inventoryArr[k] = new Inventory(inventoryID, itemName, itemCategory, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress);          
+           inventoryArr[k] = new Inventory(inventoryID, itemName, itemCategory, itemMinimumQuantity, itemQuantityOnHand, itemUnitPrice, itemAddedDate, supplierName, supplierEmailAddress, inventoryStatus);          
            y.nextLine();
            
            k++;
@@ -174,7 +192,18 @@ public class Inventory {
              String itemAddedDate = oldFormatDateTime.format(newFormatDate); 
              inventory.setItemAddedDate(itemAddedDate);
              
-             pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventory.inventoryID, inventory.itemName, inventory.getItemCategory(), inventory.itemMinimumQuantity, inventory.itemQuantityOnHand, inventory.itemUnitPrice, itemAddedDate, inventory.supplierName, inventory.supplierEmailAddress);
+             if(Integer.parseInt(inventory.itemQuantityOnHand) > 0){
+                String inventoryStatus = "In Stock";
+                inventory.setInventoryStatus(inventoryStatus);
+                 
+             }
+             else
+             {
+                String inventoryStatus = "Out Of Stock";
+                inventory.setInventoryStatus(inventoryStatus);
+             }
+             
+             pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventory.inventoryID, inventory.itemName, inventory.getItemCategory(), inventory.itemMinimumQuantity, inventory.itemQuantityOnHand, inventory.itemUnitPrice, itemAddedDate, inventory.supplierName, inventory.supplierEmailAddress, inventory.inventoryStatus);
              System.out.print("\n");
              System.out.println("Data Added Into Text File Successfully.");
              pw.flush();
@@ -199,7 +228,7 @@ public class Inventory {
         pw = new PrintWriter(bw);
 
         for (int i = 0; i < numOfRecords; i++) {
-            pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventoryArr[i].getInventoryID(), inventoryArr[i].getItemName(), inventoryArr[i].getItemCategory(), inventoryArr[i].getItemMinimumQuantity(), inventoryArr[i].getItemQuantityOnHand(), inventoryArr[i].getItemUnitPrice(), inventoryArr[i].getItemAddedDate(), inventoryArr[i].getSupplierName(), inventoryArr[i].getSupplierEmailAddress());
+            pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventoryArr[i].getInventoryID(), inventoryArr[i].getItemName(), inventoryArr[i].getItemCategory(), inventoryArr[i].getItemMinimumQuantity(), inventoryArr[i].getItemQuantityOnHand(), inventoryArr[i].getItemUnitPrice(), inventoryArr[i].getItemAddedDate(), inventoryArr[i].getSupplierName(), inventoryArr[i].getSupplierEmailAddress(), inventoryArr[i].getInventoryStatus());
 
         }
 
@@ -616,7 +645,7 @@ public class Inventory {
         pw = new PrintWriter(bw);
 
         for (int i = 0; i < numOfRecords; i++) {
-            pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventoryArr[i].getInventoryID(), inventoryArr[i].getItemName(), inventoryArr[i].getItemCategory(), inventoryArr[i].getItemMinimumQuantity(), inventoryArr[i].getItemQuantityOnHand(), inventoryArr[i].getItemUnitPrice(), inventoryArr[i].getItemAddedDate(), inventoryArr[i].getSupplierName(), inventoryArr[i].getSupplierEmailAddress());
+            pw.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|\n", inventoryArr[i].getInventoryID(), inventoryArr[i].getItemName(), inventoryArr[i].getItemCategory(), inventoryArr[i].getItemMinimumQuantity(), inventoryArr[i].getItemQuantityOnHand(), inventoryArr[i].getItemUnitPrice(), inventoryArr[i].getItemAddedDate(), inventoryArr[i].getSupplierName(), inventoryArr[i].getSupplierEmailAddress(), inventoryArr[i].getInventoryStatus());
 
         }
 

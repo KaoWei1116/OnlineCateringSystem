@@ -263,6 +263,7 @@ public class OnlineCateringSystem {
                     System.out.println("=====================================");
                     Inventory[] updateInventoryArr = new Inventory[30];
                     InventoryUI.updateInventory(updateInventoryArr);
+                    break;
                 case 5:
                     ChangePassword process = new ChangePassword();
                     Scanner inputScan = new Scanner(System.in);
@@ -320,6 +321,6 @@ public class OnlineCateringSystem {
                     System.out.println("Please insert an integer between 1 to 7. Thank you.");
             }
 
-        } while (choice < 1 || choice > 5);
+        } while (choice < 1 || choice > 7);
     }
 }
