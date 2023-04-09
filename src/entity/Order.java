@@ -15,6 +15,7 @@ public class Order implements Comparable<Order> {
     private String orderID;
     private LinkedList<OrderItem> orderItemList = new LinkedList<OrderItem>();
     private double totalPrice;
+    private String orderStatus;
     private static int currentOrderNo = 1000;
 
     public Order(){
@@ -26,6 +27,7 @@ public class Order implements Comparable<Order> {
         this.orderID = order.orderID;
         this.orderItemList = order.orderItemList;
         this.totalPrice = order.totalPrice;
+        this.orderStatus = order.orderStatus;
     }
 
     public String getOrderID() {
@@ -38,6 +40,10 @@ public class Order implements Comparable<Order> {
 
     public double getTotalPrice() {
         return totalPrice;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
     }
 
     public void setOrderID(String orderID) {
@@ -54,6 +60,10 @@ public class Order implements Comparable<Order> {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
     
     @Override
