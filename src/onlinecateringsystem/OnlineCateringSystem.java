@@ -272,40 +272,79 @@ public class OnlineCateringSystem {
                     process.getSession(finalUsername);
                     process.staffList = process.readStaffList();
                     System.out.println("\n\n\n============================================");
+                    int inputTry = 0;
+                    String password;
                     System.out.println("             PASSWORD CHANGE PROCESS");
-                    System.out.println("\nEnter Old Password >");
-                    String password = inputScan.next();
+                    do {
+                        System.out.println("\nEnter Old Password >");
+                        password = inputScan.nextLine();
 
-                    if (password.equals(process.getSession(finalUsername).getPassword())) {
-                        System.out.println("\nEnter New Password > ");
-                        String newPassword = inputScan.next();
+                        if (password.isEmpty()) {
+                            System.out.println("Please Enter Old Password");
+                        } else {
 
-                        System.out.println("\nConfirm Password");
-                        String confirmPassword = inputScan.next();
+                            if (password.equals(process.getSession(finalUsername).getPassword())) {
+                                String newPassword;
+                                do {
+                                    System.out.println("\n\nPassword must have at least one numerical character, one lowercase character and one uppercase character.");
+                                    System.out.println("Password must also have at least one special symbol such as @,#,$,%,!,*,& and password length should be between 8 and 16.");
+                                    System.out.println("\nEnter New Password > ");
+                                    newPassword = inputScan.nextLine();
+                                    if (newPassword.isEmpty()) {
+                                        System.out.println("Please enter new password");
+                                    } else {
 
-                        if (newPassword.equals(confirmPassword) == true) {
-                            System.out.println("Confirm to change password[Y=Yes/N=No] >");
-                            char confirm = inputScan.next().charAt(0);
+                                        if (process.newPasswordValidation(newPassword) == true) {
+                                            String confirmPassword;
+                                            do {
+                                                System.out.println("\nConfirm Password");
+                                                confirmPassword = inputScan.nextLine();
 
-                            if (confirm == 'y' || confirm == 'Y') {
-                                for (int index = 0; index < process.staffList.size(); index++) {
-                                    if (process.getSession(finalUsername).getStaffID().equals(process.staffList.get(index).getStaffID()) == true) {
-                                        process.staffList.get(index).setPassword(newPassword);
-                                        process.rewriteFile(process.staffList);
-                                        System.out.println("Passwords Successfuk Changed");
+                                                if (confirmPassword.isEmpty()) {
+                                                    System.out.println("Please CONFIRM new password");
+                                                    
+                                                } else {
+
+                                                    if (newPassword.equals(confirmPassword) == true) {
+                                                        
+                                                        System.out.println("Confirm to change password[Y=Yes/N=No] >");
+                                                        char confirm = inputScan.nextLine().charAt(0);
+                                                        
+                                                        if (confirm == 'y' || confirm == 'Y') {
+                                                            for (int index = 0; index < process.staffList.size(); index++) {
+                                                                if (process.getSession(finalUsername).getStaffID().equals(process.staffList.get(index).getStaffID()) == true) {
+                                                                    process.staffList.get(index).setPassword(newPassword);
+                                                                    process.rewriteFile(process.staffList);
+                                                                    System.out.println("Passwords Successfuk Changed");
+                                                                }
+
+                                                            }
+                                                        } else {
+                                                            System.out.println("Passwords Modify Cancel !!!");
+                                                            return;
+                                                        }
+                                                    } else {
+                                                        System.out.println("The New Password not consist with Confirm Password");
+                                                    }
+                                                }
+
+                                            } while (newPassword.equals(confirmPassword) == false);
+                                        } else {
+                                            System.out.println("\n The New Password Format Wrong, Pls try again ");
+                                        }
                                     }
 
-                                }
-                            } else {
+                                } while (process.newPasswordValidation(newPassword) == false);
 
-                                return;
+                            } else {
+                                System.out.println("Password Wrong, Pls Try again");
+                                inputTry++;
+                                if (inputTry == 3) {
+                                    System.out.println("Password Wrong 3 Times, Sorry,Please try later");
+                                }
                             }
-                        } else {
-                            System.out.println("The New Password not consist with Confirm Password");
                         }
-                    } else {
-                        System.out.println("Password Wrong, Pls Try again");
-                    }
+                    } while (password.equals(process.getSession(finalUsername).getPassword()) == false && inputTry != 3);
 
                     break;
                 case 6:

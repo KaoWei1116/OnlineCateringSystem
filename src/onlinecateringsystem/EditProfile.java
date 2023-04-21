@@ -88,11 +88,12 @@ public class EditProfile {
         }
     }
 
+    
     public boolean rewriteFile(ArrayList<Register> customerList) {
         boolean rewrite = false;
         try {
             FileWriter myWriter = new FileWriter("CustomerDetails.txt");
-             for(int index=0;index<customerList.size();index++){
+            for (int index = 0; index < customerList.size(); index++) {
                 myWriter.write(customerList.get(index).toString());
             }
             myWriter.close();
@@ -106,7 +107,7 @@ public class EditProfile {
 
     public void editMenu() {
         Scanner inputScan = new Scanner(System.in);
-        int choose=0;
+        int choose = 0;
         do {
             System.out.println("\n\n\n\n=====================================");
             System.out.println("|   1. NAME                         |");
@@ -123,7 +124,7 @@ public class EditProfile {
     }
 
     public void editProcess(int index) {
-            Scanner inputScan = new Scanner(System.in);
+        Scanner inputScan = new Scanner(System.in);
         switch (index) {
             case 1:
                 break;
@@ -138,47 +139,61 @@ public class EditProfile {
                 do {
                     String oldPassword;
                     System.out.println("\n\nEnter Old Password > ");
-                    oldPassword = inputScan.next();
-
-                    if (oldPassword.equals(currentSession(getUsername()).getPassword()) == true) {
-                        String newPassword;
-                        do {
-
-                            System.out.println("\n\nPassword must have at least one numerical character, one lowercase character and one uppercase character.");
-                            System.out.println("Password must also have at least one special symbol such as @,#,$,%,!,*,& and password length should be between 8 and 16.");
-                            System.out.println("Enter Your new password >");
-                            newPassword = inputScan.next();
-
-                            if (newPasswordValidation(newPassword) == true) {
-                                String confirmPassword;
-                                do {
-                                    System.out.println("\n\nEnter Confirm Password >");
-                                    confirmPassword = inputScan.next();
-
-                                    if (confirmPassword.equals(newPassword) == true) {
-                                        currentSession(getUsername()).setPassword(newPassword);
-                                        for (int i = 0; i < customerList.size(); i++) {
-                                            if (customerList.get(i).getUsername().equals(currentSession(getUsername()).getUsername()) == true) {
-                                                customerList.get(i).setPassword(newPassword);
-                                            }
-
-                                        }
-                                            rewriteFile(customerList);
-                                         System.out.println("\n\nPASSWORD Change Successful !! >");
-                                    } else {
-                                        System.out.println("Confirm Password not same with new password,Pls try again !!1");
-                                    }
-                                } while (confirmPassword.equals(newPassword) == false);
-
-                            } else {
-                                System.out.println("Password format WRONG XXX, Pls Try again>");
-                            }
-                        } while (newPasswordValidation(newPassword) == false);
-
+                    oldPassword = inputScan.nextLine();
+                    if (oldPassword.isEmpty()) {
+                        System.out.println("Please Enter Old Password");
+                        confirm = 'y';
                     } else {
-                        System.out.println("Password Wrong !!!1  ");
-                        System.out.println("Want to rede?[Y=Yes/N=No]");
-                        confirm = inputScan.next().charAt(0);
+                        if (oldPassword.equals(currentSession(getUsername()).getPassword()) == true) {
+                            String newPassword;
+                            do {
+
+                                System.out.println("\n\nPassword must have at least one numerical character, one lowercase character and one uppercase character.");
+                                System.out.println("Password must also have at least one special symbol such as @,#,$,%,!,*,& and password length should be between 8 and 16.");
+                                System.out.println("Enter Your new password >");
+                                newPassword = inputScan.nextLine();
+
+                                if (newPassword.isEmpty()) {
+                                    System.out.println("Please Enter New Password");
+                                } else {
+
+                                    if (newPasswordValidation(newPassword) == true) {
+                                        String confirmPassword;
+                                        do {
+                                            System.out.println("\n\nEnter Confirm Password >");
+                                            confirmPassword = inputScan.nextLine();
+
+                                            if (confirmPassword.isEmpty()) {
+                                                System.out.println("Please Enter Confirm Password");
+                                            } else {
+
+                                                if (confirmPassword.equals(newPassword) == true) {
+                                                    currentSession(getUsername()).setPassword(newPassword);
+                                                    for (int i = 0; i < customerList.size(); i++) {
+                                                        if (customerList.get(i).getUsername().equals(currentSession(getUsername()).getUsername()) == true) {
+                                                            customerList.get(i).setPassword(newPassword);
+                                                        }
+
+                                                    }
+                                                    rewriteFile(customerList);
+                                                    System.out.println("\n\nPASSWORD Change Successful !! >");
+                                                } else {
+                                                    System.out.println("Confirm Password not same with new password,Pls try again !!1");
+                                                }
+                                            }
+                                        } while (confirmPassword.equals(newPassword) == false);
+
+                                    } else {
+                                        System.out.println("Password format WRONG XXX, Pls Try again>");
+                                    }
+                                }
+                            } while (newPasswordValidation(newPassword) == false);
+
+                        } else {
+                            System.out.println("Password Wrong !!!1  ");
+                            System.out.println("Want to rede?[Y=Yes/N=No]");
+                            confirm = inputScan.nextLine().charAt(0);
+                        }
                     }
                 } while (confirm == 'y' || confirm == 'Y');
                 break;

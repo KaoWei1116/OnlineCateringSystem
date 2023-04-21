@@ -71,6 +71,27 @@ public class ChangePassword {
         return currentSession;
     }
 
+      public boolean newPasswordValidation(String newPassword) {
+        int isDigit = 0, isLower = 0, isUpper = 0, isSpecial = 0;
+        for (int index = 0; index < newPassword.length(); index++) {
+            if (Character.isDigit(newPassword.charAt(index)) == true) {
+                isDigit++;
+            } else if (Character.isLowerCase(newPassword.charAt(index)) == true) {
+                isLower++;
+            } else if (Character.isUpperCase(newPassword.charAt(index)) == true) {
+                isUpper++;
+            } else {
+                isSpecial++;
+            }
+        }
+        if (isDigit > 0 && isLower > 0 && isUpper > 0 && isSpecial > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
     public boolean Login() {
         boolean isLogin=false;
         Scanner inputScan = new Scanner(System.in);
